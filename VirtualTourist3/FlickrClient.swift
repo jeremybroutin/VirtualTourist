@@ -57,6 +57,24 @@ class FlickrClient: NSObject {
     return task
   }
   
+  func taskForImage(filePath: String, completionHandler: (imageData: NSData?, error: NSError?) -> Void) -> NSURLSessionTask {
+    let urlString = filePath
+    let url = NSURL(string: urlString)
+    let request = NSURLRequest(URL: url!)
+    
+    let task = session.dataTaskWithRequest(request){ data, response, downloadError in
+      if let error = downloadError {
+        let newError = FlickrClient.errorForData(data, response: response, error: error)
+        completionHandler(imageData: nil, error: newError)
+      }
+      else{
+        completionHandler(imageData: data, error: nil)
+      }
+    }
+    task.resume()
+    return task
+  }
+  
   /** Helper function: Given a dictionary of parameters, convert it to a string for a url **/
   class func escapedParameters(parameters: [String : AnyObject]) -> String {
     

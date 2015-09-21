@@ -148,14 +148,44 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LocationPhotos" id="9oB-WU-S7q" customClass="TaskCancelingTableViewCell" customModule="VirtualTourist3" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LocationPhotoCell" id="9oB-WU-S7q" customClass="TaskCancelingCollectionCell" customModule="VirtualTourist3" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDh-F0-aMB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    </variation>
+                                                </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="7iR-Ic-AMd">
+                                                    <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                                    </variation>
+                                                </activityIndicatorView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="dDh-F0-aMB"/>
+                                                <exclude reference="7iR-Ic-AMd"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="subviews">
+                                                <include reference="dDh-F0-aMB"/>
+                                                <include reference="7iR-Ic-AMd"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <outlet property="activityIndicatorView" destination="7iR-Ic-AMd" id="MKA-tz-oYb"/>
+                                            <outlet property="imageView" destination="dDh-F0-aMB" id="A7w-bR-Zin"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>

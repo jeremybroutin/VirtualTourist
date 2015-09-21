@@ -8,12 +8,14 @@
 
 import UIKit
 
-class TaskCancelingTableViewCell : UICollectionViewCell {
+class TaskCancelingCollectionCell : UICollectionViewCell {
   
   // The property uses a property observer. Any time its
   // value is set it canceles the previous NSURLSessionTask
   
   var imageName: String = ""
+  @IBOutlet weak var imageView: UIImageView!
+  @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
   
   var taskToCancelifCellIsReused: NSURLSessionTask? {
     
