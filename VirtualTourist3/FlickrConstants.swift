@@ -15,6 +15,7 @@ extension FlickrClient {
     static let APIKey = "6bd8646eaa369906b5a431cfd749d935"
     static let BaseURL = "https://api.flickr.com/services/rest/"
     static let SearchMethod = "flickr.photos.search"
+    static let GetRecent = "flickr.photos.getRecent"
   }
   
   // Param Keys

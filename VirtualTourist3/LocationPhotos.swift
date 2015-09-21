@@ -62,7 +62,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
       // Set the parameters to be used in FlickR request
       let parameters: [String: AnyObject] = [
         FlickrClient.ParamKeys.APIKey: FlickrClient.Constants.APIKey,
-        FlickrClient.ParamKeys.Method: FlickrClient.Constants.SearchMethod,
+        FlickrClient.ParamKeys.Method: FlickrClient.Constants.GetRecent,
         FlickrClient.ParamKeys.Format: FlickrClient.ParamValues.JSONFormat,
         FlickrClient.ParamKeys.NoJSONCallback: FlickrClient.ParamValues.NoJSONCallback,
         FlickrClient.ParamKeys.Latitude: receivedPin.latitude,
@@ -80,23 +80,36 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
         }
         else {
           if let photosDictionary = result.valueForKey(FlickrClient.JSONResponseKeys.Photos) as? [String:AnyObject],
-            numberOfPhotoPages = photosDictionary[FlickrClient.JSONResponseKeys.Pages] as? Int,
-            photosArray = photosDictionary[FlickrClient.JSONResponseKeys.Photo] as? [[String: AnyObject]] {
-              
-              // Save and store the number of pages returned for the pin
-              println(numberOfPhotoPages)
-              self.receivedPin.numberOfPages = numberOfPhotoPages
-              
-              // Get photo url for each photo in returned array
-              var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
+            let photosArray = photosDictionary[FlickrClient.JSONResponseKeys.Photo] as? [[String: AnyObject]],
+            let numberOfPhotoPages = photosDictionary[FlickrClient.JSONResponseKeys.Pages] as? Int {
+                
+                // Save and store the number of pages returned for the pin
+                println(numberOfPhotoPages)
+                self.receivedPin.numberOfPages = numberOfPhotoPages
+                
+                // Get photo url for each photo in returned array
+                // Below doesn't work
+                /**
+                var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
                 let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                 photo.pin = self.receivedPin
                 return photo
-              }
-              dispatch_async(dispatch_get_main_queue()) {
-                self.collectionView.reloadData()
-              }
-          }
+                }
+                **/
+                for photoEntry in photosArray {
+                  let photoURL = photoEntry[FlickrClient.JSONResponseKeys.URL_M] as! String
+                  let dictionary: [String: AnyObject] = [
+                    Photo.Keys.ImageURL: photoURL
+                  ]
+                  let newPhoto = Photo(dictionary: dictionary, context: self.sharedContext)
+                  newPhoto.pin = self.receivedPin
+                }
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                  self.collectionView.reloadData()
+                }
+
+          } // end of if let photosDictionary
           else {
             let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
             println(error)
