@@ -152,4 +152,24 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     return nil
   }
   
+  func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+    // If the user is on the Edit mode
+    if editButton.title == "Done" {
+      let pin = view.annotation as! Pin
+      // Delete the object from Core Data
+      sharedContext.deleteObject(pin)
+      // Remove the pin from the map
+      mapView.removeAnnotation(pin)
+      // Save the new context
+      CoreDataStackManager.sharedInstance().saveContext()
+    }
+    // Otherwise go to the next view controller
+    else {
+      let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPhotos") as! LocationPhotos
+      let pin = view.annotation as! Pin
+      controller.receivedPin = pin
+      self.navigationController?.pushViewController(controller, animated: true)
+    }
+  }
+  
 }

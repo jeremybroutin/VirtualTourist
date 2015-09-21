@@ -127,5 +127,118 @@
             </objects>
             <point key="canvasLocation" x="378" y="426"/>
         </scene>
+        <!--Location Photos-->
+        <scene sceneID="gLA-D9-iaw">
+            <objects>
+                <viewController storyboardIdentifier="LocationPhotos" id="JtU-RE-hZs" customClass="LocationPhotos" customModule="VirtualTourist3" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dZE-2f-XeJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="h9V-pe-yOs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7xM-en-K9D">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CrI-nC-TZ6">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jl2-gb-OmW">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LocationPhotos" id="9oB-WU-S7q" customClass="TaskCancelingTableViewCell" customModule="VirtualTourist3" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L7A-ns-LNj">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Jde-1F-K3C"/>
+                                    <barButtonItem title="New Collection" id="Ukf-aJ-oOy"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EKm-l6-Yc9"/>
+                                </items>
+                            </toolbar>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uwI-qu-ViQ">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="top" secondItem="uwI-qu-ViQ" secondAttribute="bottom" constant="8" symbolic="YES" id="5pH-Va-HfC"/>
+                            <constraint firstItem="uwI-qu-ViQ" firstAttribute="top" secondItem="7xM-en-K9D" secondAttribute="top" id="AZe-aj-r2B">
+                                <variation key="widthClass=compact" constant="62"/>
+                            </constraint>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="bottom" secondItem="L7A-ns-LNj" secondAttribute="bottom" id="GY2-j1-o7v"/>
+                            <constraint firstItem="h9V-pe-yOs" firstAttribute="top" secondItem="uwI-qu-ViQ" secondAttribute="bottom" constant="500" id="HR9-JY-Xy8">
+                                <variation key="widthClass=compact" constant="438"/>
+                            </constraint>
+                            <constraint firstItem="uwI-qu-ViQ" firstAttribute="leading" secondItem="7xM-en-K9D" secondAttribute="leading" id="b20-yI-3Tc"/>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="bottom" secondItem="h9V-pe-yOs" secondAttribute="top" id="eSm-OI-5Ur"/>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="trailing" secondItem="L7A-ns-LNj" secondAttribute="trailing" id="fxV-GK-mrz"/>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="leading" secondItem="uwI-qu-ViQ" secondAttribute="leading" id="geJ-0L-KF8"/>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="trailing" secondItem="uwI-qu-ViQ" secondAttribute="trailing" id="hjh-L6-6A2"/>
+                            <constraint firstAttribute="trailing" secondItem="uwI-qu-ViQ" secondAttribute="trailing" id="rPI-ek-RvY"/>
+                            <constraint firstItem="CrI-nC-TZ6" firstAttribute="leading" secondItem="L7A-ns-LNj" secondAttribute="leading" id="v0P-bR-ixH"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="CrI-nC-TZ6"/>
+                                <exclude reference="L7A-ns-LNj"/>
+                                <exclude reference="uwI-qu-ViQ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="AZe-aj-r2B"/>
+                                <exclude reference="b20-yI-3Tc"/>
+                                <exclude reference="rPI-ek-RvY"/>
+                                <exclude reference="5pH-Va-HfC"/>
+                                <exclude reference="GY2-j1-o7v"/>
+                                <exclude reference="eSm-OI-5Ur"/>
+                                <exclude reference="fxV-GK-mrz"/>
+                                <exclude reference="geJ-0L-KF8"/>
+                                <exclude reference="hjh-L6-6A2"/>
+                                <exclude reference="v0P-bR-ixH"/>
+                                <exclude reference="HR9-JY-Xy8"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="CrI-nC-TZ6"/>
+                                <include reference="L7A-ns-LNj"/>
+                                <include reference="uwI-qu-ViQ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="AZe-aj-r2B"/>
+                                <include reference="b20-yI-3Tc"/>
+                                <include reference="rPI-ek-RvY"/>
+                                <include reference="5pH-Va-HfC"/>
+                                <include reference="GY2-j1-o7v"/>
+                                <include reference="eSm-OI-5Ur"/>
+                                <include reference="fxV-GK-mrz"/>
+                                <include reference="geJ-0L-KF8"/>
+                                <include reference="hjh-L6-6A2"/>
+                                <include reference="v0P-bR-ixH"/>
+                                <include reference="HR9-JY-Xy8"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="CrI-nC-TZ6" id="PDL-Dx-2A8"/>
+                        <outlet property="mapView" destination="uwI-qu-ViQ" id="9Tp-B6-Mb8"/>
+                        <outlet property="newCollection" destination="Ukf-aJ-oOy" id="NA7-gm-EwB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xQF-Dg-DjN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1102.5" y="426"/>
+        </scene>
     </scenes>
 </document>
