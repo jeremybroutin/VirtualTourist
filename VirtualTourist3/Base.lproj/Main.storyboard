@@ -1,25 +1,131 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tfm-hH-TnP">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="ufC-wZ-h7g">
+        <!--Navigation Controller-->
+        <scene sceneID="TsA-no-WXL">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
-                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <navigationController id="Tfm-hH-TnP" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="58g-IS-45w">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="CBP-ea-ggB" kind="relationship" relationship="rootViewController" id="lHq-8y-s1X"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3G3-4w-bbT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-374" y="426"/>
+        </scene>
+        <!--Travel Map-->
+        <scene sceneID="mey-3o-9Ja">
+            <objects>
+                <viewController id="CBP-ea-ggB" customClass="TravelMap" customModule="VirtualTourist3" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bt2-Ee-rBG"/>
+                        <viewControllerLayoutGuide type="bottom" id="n4l-gi-AkO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Y4E-lq-2qt">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Vx0-bR-mac">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="M9u-WI-Rma" appends="YES" id="0Qj-I4-KBz"/>
+                                </connections>
+                            </mapView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap a Pin to delete it" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bTe-X5-M7T">
+                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <color key="backgroundColor" red="1" green="0.29179774409721537" blue="0.35140728891584028" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="PAK-ld-5ym"/>
+                                    <constraint firstAttribute="width" constant="400" id="flM-Ch-b3d"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="19"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="PAK-ld-5ym"/>
+                                        <exclude reference="flM-Ch-b3d"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="PAK-ld-5ym"/>
+                                        <include reference="flM-Ch-b3d"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bTe-X5-M7T" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="DBi-J8-Eu2"/>
+                            <constraint firstItem="Vx0-bR-mac" firstAttribute="top" secondItem="Y4E-lq-2qt" secondAttribute="top" id="O47-9t-h21"/>
+                            <constraint firstItem="Vx0-bR-mac" firstAttribute="leading" secondItem="Y4E-lq-2qt" secondAttribute="leading" id="PDx-ZW-BFx"/>
+                            <constraint firstItem="Vx0-bR-mac" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="UD8-M4-efe"/>
+                            <constraint firstItem="Vx0-bR-mac" firstAttribute="leading" secondItem="bTe-X5-M7T" secondAttribute="leading" id="nl2-Zk-H9G"/>
+                            <constraint firstItem="bTe-X5-M7T" firstAttribute="trailing" secondItem="Vx0-bR-mac" secondAttribute="trailing" id="uDQ-jK-oYx"/>
+                            <constraint firstAttribute="trailing" secondItem="Vx0-bR-mac" secondAttribute="trailing" id="xpv-23-nAD"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Vx0-bR-mac"/>
+                                <exclude reference="bTe-X5-M7T"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="O47-9t-h21"/>
+                                <exclude reference="PDx-ZW-BFx"/>
+                                <exclude reference="UD8-M4-efe"/>
+                                <exclude reference="nl2-Zk-H9G"/>
+                                <exclude reference="xpv-23-nAD"/>
+                                <exclude reference="DBi-J8-Eu2"/>
+                                <exclude reference="uDQ-jK-oYx"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="Vx0-bR-mac"/>
+                                <include reference="bTe-X5-M7T"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="O47-9t-h21"/>
+                                <include reference="PDx-ZW-BFx"/>
+                                <include reference="UD8-M4-efe"/>
+                                <include reference="nl2-Zk-H9G"/>
+                                <include reference="xpv-23-nAD"/>
+                                <include reference="DBi-J8-Eu2"/>
+                                <include reference="uDQ-jK-oYx"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" id="GDq-BQ-5xQ">
+                        <barButtonItem key="rightBarButtonItem" title="Edit Pins" id="rSf-R2-GX5">
+                            <color key="tintColor" red="1" green="0.29179774409999998" blue="0.3514072889" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="editButtonTapped:" destination="CBP-ea-ggB" id="rFU-tF-lFO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="deletePinLabel" destination="bTe-X5-M7T" id="pDh-s6-r5P"/>
+                        <outlet property="editButton" destination="rSf-R2-GX5" id="quA-bb-04b"/>
+                        <outlet property="longPress" destination="M9u-WI-Rma" id="WRW-oJ-ctx"/>
+                        <outlet property="mapView" destination="Vx0-bR-mac" id="4KF-6y-KLA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HqQ-i2-G59" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="M9u-WI-Rma">
+                    <connections>
+                        <action selector="tapHoldOnMap:" destination="CBP-ea-ggB" id="02s-tA-cA1"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="378" y="426"/>
         </scene>
     </scenes>
 </document>
