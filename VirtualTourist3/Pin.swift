@@ -17,10 +17,12 @@ class Pin: NSManagedObject, MKAnnotation {
   struct Keys {
     static let Latitude = "latitude"
     static let Longitude = "longitude"
+    static let NumberOfPages = "numberOfPages"
   }
   
   @NSManaged var latitude: Double
   @NSManaged var longitude: Double
+  @NSManaged var numberOfPages: NSNumber?
   @NSManaged var photos: [Photo]
   
   var coordinate: CLLocationCoordinate2D {

@@ -27,7 +27,7 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     return url.URLByAppendingPathComponent(fileName).path!
   }
   
-  /** Mark: - App Life Cycle **/
+  /** Mark: - Core Data Context **/
   
   var sharedContext: NSManagedObjectContext{
     return CoreDataStackManager.sharedInstance().managedObjectContext!
@@ -41,10 +41,21 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     // set map delegate and restore last seen region
     mapView.delegate = self
     restoreMapRegion(false)
+    mapView.addAnnotations(fetchAllPins())
   }
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+  }
+  
+  /** Mark: - Get All Pins **/
+  
+  func fetchAllPins() -> [Pin] {
+    let error: NSErrorPointer = nil
+    let fetchRequest = NSFetchRequest(entityName: "Pin")
+    let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
+    
+    return results as! [Pin]
   }
   
   /** Mark: - Drop a Pin **/
