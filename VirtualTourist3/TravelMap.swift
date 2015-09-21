@@ -49,8 +49,27 @@ class TravelMap: UIViewController, MKMapViewDelegate {
   
   /** Mark: - Drop a Pin **/
   
+  var pinToBeAdded: Pin? = nil
+  
   @IBAction func tapHoldOnMap(gesturerecognizer: UILongPressGestureRecognizer) {
+    var touchPoint = gesturerecognizer.locationInView(self.mapView)
+    var newCoord: CLLocationCoordinate2D = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
     
+    switch gesturerecognizer.state{
+    case .Ended:
+      let dictionary: [String: AnyObject] = [
+        Pin.Keys.Latitude: newCoord.latitude,
+        Pin.Keys.Longitude: newCoord.longitude
+      ]
+      //create a Pin object with coordinates from touch point
+      pinToBeAdded = Pin(dictionary: dictionary, context: sharedContext)
+      //save it to core data
+      CoreDataStackManager.sharedInstance().saveContext()
+      //add it to the map
+      mapView.addAnnotation(pinToBeAdded)
+    default:
+      return
+    }
   }
   
   /** Mark: - Pin(s) Edit **/
@@ -100,6 +119,26 @@ class TravelMap: UIViewController, MKMapViewDelegate {
 
   func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
     self.saveMapRegion()
+  }
+  
+  func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    if let annotation = annotation as? Pin {
+      let identifier = "pin"
+      var view: MKPinAnnotationView
+      
+      if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+        dequeuedView.annotation = annotation
+        view = dequeuedView
+      }
+      else{
+        view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        view.canShowCallout = false // don't show any pin info when taped
+        view.animatesDrop = true // drop effect for pin
+        view.draggable = false // don't allow pin dragging
+      }
+      return view
+    }
+    return nil
   }
   
 }

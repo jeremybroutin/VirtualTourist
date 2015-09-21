@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import MapKit
 import CoreData
 
 @objc(Pin)
 
-class Pin: NSManagedObject {
+class Pin: NSManagedObject, MKAnnotation {
   
   struct Keys {
     static let Latitude = "latitude"
@@ -22,6 +23,18 @@ class Pin: NSManagedObject {
   @NSManaged var longitude: Double
   @NSManaged var photos: [Photo]
   
+  var coordinate: CLLocationCoordinate2D {
+    
+    set {
+      self.latitude = newValue.latitude
+      self.longitude = newValue.longitude
+    }
+    
+    get {
+      return CLLocationCoordinate2DMake(latitude, longitude)
+    }
+  }
+  
   // Standard Core Data init method.
   override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
     super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -31,7 +44,7 @@ class Pin: NSManagedObject {
     
     // Get the entity associated with the "Person" type.  This is an object that contains
     // the information from the Model.xcdatamodeld file.
-    let entity =  NSEntityDescription.entityForName("Person", inManagedObjectContext: context)!
+    let entity =  NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
     
     // Now we can call an init method that we have inherited from NSManagedObject. Remember that
     // the Person class is a subclass of NSManagedObject. This inherited init method does the

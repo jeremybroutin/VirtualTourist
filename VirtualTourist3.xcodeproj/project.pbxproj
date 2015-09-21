@@ -17,6 +17,8 @@
 		E32587E01BB06E5300CD20F3 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587DF1BB06E5300CD20F3 /* Pin.swift */; };
 		E32587E21BB06F7B00CD20F3 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587E11BB06F7B00CD20F3 /* Photo.swift */; };
 		E32587E51BB0717C00CD20F3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E32587E31BB0717C00CD20F3 /* Model.xcdatamodeld */; };
+		E32587E71BB0723A00CD20F3 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587E61BB0723A00CD20F3 /* FlickrClient.swift */; };
+		E32587E91BB0732100CD20F3 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587E81BB0732100CD20F3 /* ImageCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		E32587DF1BB06E5300CD20F3 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		E32587E11BB06F7B00CD20F3 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E32587E41BB0717C00CD20F3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		E32587E61BB0723A00CD20F3 /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
+		E32587E81BB0732100CD20F3 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +132,8 @@
 				E32587DF1BB06E5300CD20F3 /* Pin.swift */,
 				E32587E11BB06F7B00CD20F3 /* Photo.swift */,
 				E32587E31BB0717C00CD20F3 /* Model.xcdatamodeld */,
+				E32587E61BB0723A00CD20F3 /* FlickrClient.swift */,
+				E32587E81BB0732100CD20F3 /* ImageCache.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -250,6 +256,8 @@
 			files = (
 				E32587D91BB0625C00CD20F3 /* TravelMap.swift in Sources */,
 				E32587B91BB061F300CD20F3 /* AppDelegate.swift in Sources */,
+				E32587E91BB0732100CD20F3 /* ImageCache.swift in Sources */,
+				E32587E71BB0723A00CD20F3 /* FlickrClient.swift in Sources */,
 				E32587DB1BB06D2D00CD20F3 /* CoreDataStackManager.swift in Sources */,
 				E32587E01BB06E5300CD20F3 /* Pin.swift in Sources */,
 				E32587E21BB06F7B00CD20F3 /* Photo.swift in Sources */,
