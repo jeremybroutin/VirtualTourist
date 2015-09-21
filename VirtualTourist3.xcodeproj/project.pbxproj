@@ -13,6 +13,10 @@
 		E32587C31BB061F300CD20F3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E32587C11BB061F300CD20F3 /* LaunchScreen.xib */; };
 		E32587CF1BB061F300CD20F3 /* VirtualTourist3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587CE1BB061F300CD20F3 /* VirtualTourist3Tests.swift */; };
 		E32587D91BB0625C00CD20F3 /* TravelMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587D81BB0625C00CD20F3 /* TravelMap.swift */; };
+		E32587DB1BB06D2D00CD20F3 /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587DA1BB06D2D00CD20F3 /* CoreDataStackManager.swift */; };
+		E32587E01BB06E5300CD20F3 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587DF1BB06E5300CD20F3 /* Pin.swift */; };
+		E32587E21BB06F7B00CD20F3 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587E11BB06F7B00CD20F3 /* Photo.swift */; };
+		E32587E51BB0717C00CD20F3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E32587E31BB0717C00CD20F3 /* Model.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		E32587CD1BB061F300CD20F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E32587CE1BB061F300CD20F3 /* VirtualTourist3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTourist3Tests.swift; sourceTree = "<group>"; };
 		E32587D81BB0625C00CD20F3 /* TravelMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelMap.swift; sourceTree = "<group>"; };
+		E32587DA1BB06D2D00CD20F3 /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
+		E32587DF1BB06E5300CD20F3 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		E32587E11BB06F7B00CD20F3 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		E32587E41BB0717C00CD20F3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +85,11 @@
 		E32587B51BB061F300CD20F3 /* VirtualTourist3 */ = {
 			isa = PBXGroup;
 			children = (
+				E32587DC1BB06E2D00CD20F3 /* Model */,
+				E32587DD1BB06E3300CD20F3 /* View */,
+				E32587DE1BB06E3800CD20F3 /* Controller */,
 				E32587B81BB061F300CD20F3 /* AppDelegate.swift */,
 				E32587BC1BB061F300CD20F3 /* Main.storyboard */,
-				E32587D81BB0625C00CD20F3 /* TravelMap.swift */,
 				E32587BF1BB061F300CD20F3 /* Images.xcassets */,
 				E32587C11BB061F300CD20F3 /* LaunchScreen.xib */,
 				E32587B61BB061F300CD20F3 /* Supporting Files */,
@@ -110,6 +120,32 @@
 				E32587CD1BB061F300CD20F3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E32587DC1BB06E2D00CD20F3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E32587DF1BB06E5300CD20F3 /* Pin.swift */,
+				E32587E11BB06F7B00CD20F3 /* Photo.swift */,
+				E32587E31BB0717C00CD20F3 /* Model.xcdatamodeld */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		E32587DD1BB06E3300CD20F3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		E32587DE1BB06E3800CD20F3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E32587D81BB0625C00CD20F3 /* TravelMap.swift */,
+				E32587DA1BB06D2D00CD20F3 /* CoreDataStackManager.swift */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +250,10 @@
 			files = (
 				E32587D91BB0625C00CD20F3 /* TravelMap.swift in Sources */,
 				E32587B91BB061F300CD20F3 /* AppDelegate.swift in Sources */,
+				E32587DB1BB06D2D00CD20F3 /* CoreDataStackManager.swift in Sources */,
+				E32587E01BB06E5300CD20F3 /* Pin.swift in Sources */,
+				E32587E21BB06F7B00CD20F3 /* Photo.swift in Sources */,
+				E32587E51BB0717C00CD20F3 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +459,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E32587E31BB0717C00CD20F3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E32587E41BB0717C00CD20F3 /* Model.xcdatamodel */,
+			);
+			currentVersion = E32587E41BB0717C00CD20F3 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E32587AB1BB061F300CD20F3 /* Project object */;
 }

@@ -29,10 +29,18 @@ class TravelMap: UIViewController, MKMapViewDelegate {
   
   /** Mark: - App Life Cycle **/
   
+  var sharedContext: NSManagedObjectContext{
+    return CoreDataStackManager.sharedInstance().managedObjectContext!
+  }
+  
+  /** Mark: - App Life Cycle **/
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    //debug
-    println("\(self.editButton.title!)")
+    
+    // set map delegate and restore last seen region
+    mapView.delegate = self
+    restoreMapRegion(false)
   }
   
   override func viewWillAppear(animated: Bool) {
