@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
   
   /** Mark: - Outlets **/
   
@@ -21,12 +21,14 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
   /** Mark: - Properties **/
   
   var receivedPin: Pin!
+  // Arrays to keep track of selected or updated collection view cells
+  var selectedIndexes   = [NSIndexPath]()
+  var insertedIndexPaths: [NSIndexPath]!
+  var deletedIndexPaths : [NSIndexPath]!
+  var updatedIndexPaths : [NSIndexPath]!
+  // Cell identifier
+  var reuseIdentifier = "PhotoLocationCell"
   
-  /** Mark: - Core Data Context **/
-  
-  var sharedContext: NSManagedObjectContext{
-    return CoreDataStackManager.sharedInstance().managedObjectContext!
-  }
   
   /** Mark: - App Life Cycle **/
   
@@ -40,8 +42,16 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
     let mapRegion = MKCoordinateRegionMakeWithDistance(receivedPin.coordinate, 25000, 25000)
     mapView.region = mapRegion
     
+    // set the collection delegate and data source
+    collectionView.delegate = self
+    collectionView.dataSource = self
+    
     // fetch data to see if we already have pin photos
-    fetchedResultsController.performFetch(nil)
+    var error: NSError?
+    fetchedResultsController.performFetch(&error)
+    if let error = error {
+      println("Error getting the data for the Pin")
+    }
     fetchedResultsController.delegate = self
   }
   
@@ -79,36 +89,39 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
           println(error)
         }
         else {
+          
           if let photosDictionary = result.valueForKey(FlickrClient.JSONResponseKeys.Photos) as? [String:AnyObject],
             let photosArray = photosDictionary[FlickrClient.JSONResponseKeys.Photo] as? [[String: AnyObject]],
             let numberOfPhotoPages = photosDictionary[FlickrClient.JSONResponseKeys.Pages] as? Int {
-                
-                // Save and store the number of pages returned for the pin
-                println(numberOfPhotoPages)
-                self.receivedPin.numberOfPages = numberOfPhotoPages
-                
-                // Get photo url for each photo in returned array
-                // Below doesn't work
-                /**
-                var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
+              
+              // Save and store the number of pages returned for the pin
+              self.receivedPin.numberOfPages = numberOfPhotoPages
+              
+              // Get photo url for each photo in returned array
+              var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
                 let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                 photo.pin = self.receivedPin
+                // println("photo is: \(photo)")
                 return photo
-                }
-                **/
-                for photoEntry in photosArray {
-                  let photoURL = photoEntry[FlickrClient.JSONResponseKeys.URL_M] as! String
-                  let dictionary: [String: AnyObject] = [
-                    Photo.Keys.ImageURL: photoURL
-                  ]
-                  let newPhoto = Photo(dictionary: dictionary, context: self.sharedContext)
-                  newPhoto.pin = self.receivedPin
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                  self.collectionView.reloadData()
-                }
-
+              }
+              
+              /** Other way to proceed
+              
+              for photoEntry in photosArray {
+              let photoURL = photoEntry[FlickrClient.JSONResponseKeys.URL_M] as! String
+              let dictionary: [String: AnyObject] = [
+              Photo.Keys.ImageURL: photoURL
+              ]
+              let newPhoto = Photo(dictionary: dictionary, context: self.sharedContext)
+              newPhoto.pin = self.receivedPin
+              
+              }
+              **/
+              
+              dispatch_async(dispatch_get_main_queue()){
+                self.collectionView.reloadData()
+              }
+              
           } // end of if let photosDictionary
           else {
             let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
@@ -118,6 +131,12 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
       }
     } // end of if Pin Photos is empty
   } // end of viewWillAppear
+  
+  /** Mark: - Core Data Context **/
+  
+  var sharedContext: NSManagedObjectContext{
+    return CoreDataStackManager.sharedInstance().managedObjectContext!
+  }
   
   override func viewDidLayoutSubviews() {
     //Layout the collectionView cells properly on the View
@@ -138,8 +157,8 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
     
     let fetchRequest = NSFetchRequest(entityName: "Photo")
     
-    fetchRequest.sortDescriptors = []
-    fetchRequest.predicate = NSPredicate(format: "pin == %@", self.receivedPin);
+    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+    fetchRequest.predicate = NSPredicate(format: "pin == %@", self.receivedPin)
     
     let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
       managedObjectContext: self.sharedContext,
@@ -150,26 +169,10 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
     
     }()
   
-  /** Mark: - CollectionView delegate methods **/
-  
-  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
-      return sectionInfo.numberOfObjects
-    }
-    return 1
-  }
-  
-  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("LocationPhotoCell", forIndexPath: indexPath) as! TaskCancelingCollectionCell
-    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-    
-    configureCell(cell, photo: photo)
-    return cell
-  }
-  
   /** Mark: - Configure cell **/
   
   func configureCell(cell: TaskCancelingCollectionCell, photo: Photo) {
+    
     var photoImage = UIImage(named: "photoPlaceHolder")
     cell.imageView!.image = nil
     
@@ -177,9 +180,11 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
       photoImage = UIImage(named: "noImage")
     }
     else if photo.image != nil {
+      println("photo.image != nil")
       photoImage = photo.image
     }
     else {
+      
       // Download image
       let task = FlickrClient.sharedInstance().taskForImage(photo.imageURL){ data, error in
         if let error = error {
@@ -201,4 +206,34 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDataS
     cell.imageView.image = photoImage
   }
   
+  /** Mark: - NSFetchedresults delegate methods **/
+  // Will be added later
+  
+}
+
+extension LocationPhotos: UICollectionViewDataSource {
+  
+  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
+      
+      //debug
+      println("sectionInfo Number of Objects is: \(sectionInfo.numberOfObjects)")
+      
+      return sectionInfo.numberOfObjects
+    }
+    return 1
+  }
+  
+  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! TaskCancelingCollectionCell
+    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+    println("fetched photo is: \(photo)")
+    
+    // debug: trying to simply show placeholders
+    cell.imageView.image = UIImage(named: "photoPlaceHolder")
+    
+    //configureCell(cell, photo: photo)
+    return cell
+  }
 }

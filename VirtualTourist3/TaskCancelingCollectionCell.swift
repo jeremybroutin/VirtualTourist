@@ -13,7 +13,6 @@ class TaskCancelingCollectionCell : UICollectionViewCell {
   // The property uses a property observer. Any time its
   // value is set it canceles the previous NSURLSessionTask
   
-  var imageName: String = ""
   @IBOutlet weak var imageView: UIImageView!
   @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
   
@@ -23,6 +22,15 @@ class TaskCancelingCollectionCell : UICollectionViewCell {
       if let taskToCancel = oldValue {
         taskToCancel.cancel()
       }
+    }
+  }
+  
+  var image: UIImage?{
+    set{
+      self.imageView.image = newValue
+    }
+    get{
+      return self.imageView.image ?? nil
     }
   }
 }
