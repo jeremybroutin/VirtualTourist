@@ -74,8 +74,21 @@ class TravelMap: UIViewController, MKMapViewDelegate {
       ]
       //create a Pin object with coordinates from touch point
       pinToBeAdded = Pin(dictionary: dictionary, context: sharedContext)
-      //save it to core data
-      CoreDataStackManager.sharedInstance().saveContext()
+      println("pinToBeAdded: \(pinToBeAdded)")
+      FlickrClient.sharedInstance().getPhotosForPin(pinToBeAdded!, completionHandler: {
+        success, error in
+        if success{
+          dispatch_async(dispatch_get_main_queue()){
+            CoreDataStackManager.sharedInstance().saveContext()
+          }
+        }
+        else {
+          dispatch_async(dispatch_get_main_queue()){
+            println("error getting photos for the pin upload drop")
+          }
+        }
+      })
+      
       //add it to the map
       mapView.addAnnotation(pinToBeAdded)
     default:

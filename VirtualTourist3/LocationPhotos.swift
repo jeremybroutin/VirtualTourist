@@ -57,9 +57,9 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-    
+    /**
     if receivedPin.photos.isEmpty {
-      
+    
       // Chose a random page to query photos from FlickR
       var randomPage = 1
       if let numberOfPages = receivedPin.numberOfPages {
@@ -119,6 +119,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
               **/
               
               dispatch_async(dispatch_get_main_queue()){
+                CoreDataStackManager.sharedInstance().saveContext()
                 self.collectionView.reloadData()
               }
               
@@ -129,7 +130,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
           }
         }
       }
-    } // end of if Pin Photos is empty
+    } // end of if Pin Photos is empty**/
   } // end of viewWillAppear
   
   /** Mark: - Core Data Context **/
