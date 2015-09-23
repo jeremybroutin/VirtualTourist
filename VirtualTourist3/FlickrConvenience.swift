@@ -20,9 +20,7 @@ extension FlickrClient {
   
   /** Mark: - Convenience Methods **/
   
-  func getPhotosForPin(pin: Pin, handler: UIViewController,
-    
-    completionHandler: (success: Bool, error: NSError?) -> Void) {
+  func getPhotosForPin(pin: Pin, completionHandler: (success: Bool, error: NSError?) -> Void) {
     
     // Chose a random page to query photos from FlickR
     var randomPage = 1

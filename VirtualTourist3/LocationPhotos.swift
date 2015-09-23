@@ -72,7 +72,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
       // Set the parameters to be used in FlickR request
       let parameters: [String: AnyObject] = [
         FlickrClient.ParamKeys.APIKey: FlickrClient.Constants.APIKey,
-        FlickrClient.ParamKeys.Method: FlickrClient.Constants.GetRecent,
+        FlickrClient.ParamKeys.Method: FlickrClient.Constants.SearchMethod,
         FlickrClient.ParamKeys.Format: FlickrClient.ParamValues.JSONFormat,
         FlickrClient.ParamKeys.NoJSONCallback: FlickrClient.ParamValues.NoJSONCallback,
         FlickrClient.ParamKeys.Latitude: receivedPin.latitude,
