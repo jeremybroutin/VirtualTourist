@@ -171,7 +171,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   
   /** Mark: - Configure cell **/
   
-  func configureCell(cell: TaskCancelingCollectionCell, photo: Photo) {
+  func configureCell(cell: PhotoCell, photo: Photo) {
     
     var photoImage = UIImage(named: "photoPlaceHolder")
     cell.imageView!.image = nil
@@ -226,7 +226,7 @@ extension LocationPhotos: UICollectionViewDataSource {
   
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! TaskCancelingCollectionCell
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PhotoCell
     let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
     println("fetched photo is: \(photo)")
     

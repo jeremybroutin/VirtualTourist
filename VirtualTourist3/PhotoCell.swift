@@ -6,9 +6,10 @@
 //  Copyright (c) 2015 Jeremy Broutin. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class TaskCancelingCollectionCell : UICollectionViewCell {
+class PhotoCell : UICollectionViewCell {
   
   // The property uses a property observer. Any time its
   // value is set it canceles the previous NSURLSessionTask
