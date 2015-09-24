@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tfm-hH-TnP">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -144,7 +145,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jl2-gb-OmW">
-                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -159,9 +160,6 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDh-F0-aMB">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                                    <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    </variation>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="7iR-Ic-AMd">
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
@@ -173,17 +171,41 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="-8" id="7jC-XX-IwK"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="dDh-F0-aMB" secondAttribute="bottom" constant="-8" id="he5-lH-7JO"/>
+                                            <constraint firstAttribute="centerX" secondItem="dDh-F0-aMB" secondAttribute="centerX" id="ivM-Zh-aoZ"/>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="top" secondItem="9oB-WU-S7q" secondAttribute="topMargin" constant="-8" id="jp9-lm-DKO"/>
+                                            <constraint firstAttribute="centerY" secondItem="dDh-F0-aMB" secondAttribute="centerY" id="u8l-7X-4xL"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="dDh-F0-aMB" secondAttribute="trailing" constant="-8" id="yGd-eJ-aoZ"/>
+                                        </constraints>
                                         <size key="customSize" width="100" height="100"/>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="dDh-F0-aMB"/>
                                                 <exclude reference="7iR-Ic-AMd"/>
                                             </mask>
+                                            <mask key="constraints">
+                                                <exclude reference="7jC-XX-IwK"/>
+                                                <exclude reference="he5-lH-7JO"/>
+                                                <exclude reference="ivM-Zh-aoZ"/>
+                                                <exclude reference="jp9-lm-DKO"/>
+                                                <exclude reference="u8l-7X-4xL"/>
+                                                <exclude reference="yGd-eJ-aoZ"/>
+                                            </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="dDh-F0-aMB"/>
                                                 <include reference="7iR-Ic-AMd"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <include reference="7jC-XX-IwK"/>
+                                                <include reference="he5-lH-7JO"/>
+                                                <include reference="ivM-Zh-aoZ"/>
+                                                <include reference="jp9-lm-DKO"/>
+                                                <include reference="u8l-7X-4xL"/>
+                                                <include reference="yGd-eJ-aoZ"/>
                                             </mask>
                                         </variation>
                                         <connections>

@@ -29,7 +29,13 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   // Cell identifier
   var reuseIdentifier = "PhotoLocationCell"
   
+  /** Mark: - Core Data Context **/
   
+  var sharedContext: NSManagedObjectContext{
+    return CoreDataStackManager.sharedInstance().managedObjectContext!
+  }
+  
+  /**********************************************************************************************/
   /** Mark: - App Life Cycle **/
   
   override func viewDidLoad() {
@@ -78,7 +84,6 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
       ]
       
       // Start task to download photos
-      
       FlickrClient.sharedInstance().taskForResources(parameters) { result, error in
         if let error = error {
           println(error)
@@ -96,24 +101,8 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
               var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
                 let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                 photo.pin = self.receivedPin
-                // println("photo is: \(photo)")
-                println("Pin is: \(self.receivedPin)")
-                println("photo should be attached to pin: \(photo.pin)")
                 return photo
               }
-              
-              /** Other way to proceed
-              
-              for photoEntry in photosArray {
-              let photoURL = photoEntry[FlickrClient.JSONResponseKeys.URL_M] as! String
-              let dictionary: [String: AnyObject] = [
-              Photo.Keys.ImageURL: photoURL
-              ]
-              let newPhoto = Photo(dictionary: dictionary, context: self.sharedContext)
-              newPhoto.pin = self.receivedPin
-              
-              }
-              **/
               
               dispatch_async(dispatch_get_main_queue()){
                 CoreDataStackManager.sharedInstance().saveContext()
@@ -132,12 +121,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     } // end of if Pin Photos is empty
   } // end of viewWillAppear
   
-  /** Mark: - Core Data Context **/
-  
-  var sharedContext: NSManagedObjectContext{
-    return CoreDataStackManager.sharedInstance().managedObjectContext!
-  }
-  
+
   override func viewDidLayoutSubviews() {
     //Layout the collectionView cells properly on the View
     let layout = UICollectionViewFlowLayout()
@@ -151,6 +135,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     collectionView.collectionViewLayout = layout
   }
   
+  /**********************************************************************************************/
   /** Mark: - Fetch Results Controller **/
   
   lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -178,7 +163,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     }
   }
 
-  
+  /**********************************************************************************************/
   /** Mark: - Configure cell **/
   
   func configureCell(cell: PhotoCell, photo: Photo) {
@@ -221,43 +206,9 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
       })
       cell.taskToCancelifCellIsReused = task
     }
-    
-    /**
-    var photoImage = UIImage(named: "photoPlaceHolder")
-    cell.imageView!.image = nil
-    
-    if photo.imageFilePath == nil || photo.imageFilePath == "" {
-      photoImage = UIImage(named: "noImage")
-    }
-    else if photo.image != nil {
-      cell.activityIndicatorView.stopAnimating()
-      photoImage = photo.image
-    }
-    else {
-      
-      // Download image
-      let task = FlickrClient.sharedInstance().taskForImage(photo.imageURL){ data, error in
-        if let error = error {
-          println("Image download error: \(error.localizedDescription)")
-        }
-        if let data = data {
-          // Create the image
-          let image = UIImage(data: data)
-          // Update the model for the info to be cashed
-          photo.image = image
-          // Update the cell later on the main thread
-          dispatch_async(dispatch_get_main_queue()){
-            cell.activityIndicatorView.stopAnimating()
-            cell.imageView.image = image
-          }
-        }
-      }
-      cell.taskToCancelifCellIsReused = task
-    }**/
-    
-    //cell.imageView.image = photoImage
   }
   
+  /**********************************************************************************************/
   /** Mark: - NSFetchedresults delegate methods **/
   // Will be added later
   
