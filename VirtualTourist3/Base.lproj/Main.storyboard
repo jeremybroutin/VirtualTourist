@@ -151,7 +151,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoLocationCell" id="9oB-WU-S7q" customClass="PhotoCell" customModule="VirtualTourist3" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoLocationCell" id="9oB-WU-S7q" customClass="PhotoCell" customModule="VirtualTourist3" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -164,26 +164,41 @@
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="7iR-Ic-AMd">
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
                                                     <color key="color" red="1" green="0.29179774409999998" blue="0.3514072889" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="40" y="40" width="20" height="20"/>
-                                                    </variation>
                                                 </activityIndicatorView>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="selectedicon" translatesAutoresizingMaskIntoConstraints="NO" id="gcq-Vi-GZy">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="-8" id="7jC-XX-IwK"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="dDh-F0-aMB" secondAttribute="bottom" constant="-8" id="he5-lH-7JO"/>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="-8" id="7jC-XX-IwK">
+                                                <variation key="widthClass=compact" constant="-8"/>
+                                            </constraint>
+                                            <constraint firstItem="7iR-Ic-AMd" firstAttribute="centerY" secondItem="dDh-F0-aMB" secondAttribute="centerY" id="DzP-Ih-Glx"/>
+                                            <constraint firstItem="gcq-Vi-GZy" firstAttribute="centerX" secondItem="dDh-F0-aMB" secondAttribute="centerX" id="UEg-Qu-xT8"/>
+                                            <constraint firstItem="gcq-Vi-GZy" firstAttribute="centerX" secondItem="7iR-Ic-AMd" secondAttribute="centerX" id="UaC-YL-q9R"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="gcq-Vi-GZy" secondAttribute="bottom" constant="24" id="f0f-Am-fwo"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="dDh-F0-aMB" secondAttribute="bottom" constant="-8" id="he5-lH-7JO">
+                                                <variation key="widthClass=compact" constant="-8"/>
+                                            </constraint>
                                             <constraint firstAttribute="centerX" secondItem="dDh-F0-aMB" secondAttribute="centerX" id="ivM-Zh-aoZ"/>
-                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="top" secondItem="9oB-WU-S7q" secondAttribute="topMargin" constant="-8" id="jp9-lm-DKO"/>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="top" secondItem="9oB-WU-S7q" secondAttribute="topMargin" constant="-8" id="jp9-lm-DKO">
+                                                <variation key="widthClass=compact" constant="-8"/>
+                                            </constraint>
+                                            <constraint firstItem="gcq-Vi-GZy" firstAttribute="top" secondItem="9oB-WU-S7q" secondAttribute="topMargin" constant="23" id="l4G-Aj-ygU"/>
+                                            <constraint firstItem="gcq-Vi-GZy" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="24" id="qEa-fk-Krk"/>
                                             <constraint firstAttribute="centerY" secondItem="dDh-F0-aMB" secondAttribute="centerY" id="u8l-7X-4xL"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="dDh-F0-aMB" secondAttribute="trailing" constant="-8" id="yGd-eJ-aoZ"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="dDh-F0-aMB" secondAttribute="trailing" constant="-8" id="yGd-eJ-aoZ">
+                                                <variation key="widthClass=compact" constant="-8"/>
+                                            </constraint>
                                         </constraints>
                                         <size key="customSize" width="100" height="100"/>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="dDh-F0-aMB"/>
                                                 <exclude reference="7iR-Ic-AMd"/>
+                                                <exclude reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="7jC-XX-IwK"/>
@@ -192,12 +207,19 @@
                                                 <exclude reference="jp9-lm-DKO"/>
                                                 <exclude reference="u8l-7X-4xL"/>
                                                 <exclude reference="yGd-eJ-aoZ"/>
+                                                <exclude reference="UEg-Qu-xT8"/>
+                                                <exclude reference="UaC-YL-q9R"/>
+                                                <exclude reference="f0f-Am-fwo"/>
+                                                <exclude reference="l4G-Aj-ygU"/>
+                                                <exclude reference="qEa-fk-Krk"/>
+                                                <exclude reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="dDh-F0-aMB"/>
                                                 <include reference="7iR-Ic-AMd"/>
+                                                <include reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="7jC-XX-IwK"/>
@@ -206,11 +228,18 @@
                                                 <include reference="jp9-lm-DKO"/>
                                                 <include reference="u8l-7X-4xL"/>
                                                 <include reference="yGd-eJ-aoZ"/>
+                                                <include reference="UEg-Qu-xT8"/>
+                                                <include reference="UaC-YL-q9R"/>
+                                                <include reference="f0f-Am-fwo"/>
+                                                <include reference="l4G-Aj-ygU"/>
+                                                <include reference="qEa-fk-Krk"/>
+                                                <include reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <connections>
                                             <outlet property="activityIndicatorView" destination="7iR-Ic-AMd" id="MKA-tz-oYb"/>
                                             <outlet property="imageView" destination="dDh-F0-aMB" id="A7w-bR-Zin"/>
+                                            <outlet property="selectedIcon" destination="gcq-Vi-GZy" id="rJy-HD-w9G"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -297,4 +326,7 @@
             <point key="canvasLocation" x="1102.5" y="426"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="selectedicon" width="25" height="25"/>
+    </resources>
 </document>

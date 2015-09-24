@@ -164,18 +164,20 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   }
 
   /**********************************************************************************************/
-  /** Mark: - Configure cell **/
+  /** Mark: - Utility methods **/
   
   func configureCell(cell: PhotoCell, photo: Photo) {
     
     //start with the placeholder
     var photoImage = UIImage(named: "photoPlaceHolder")
     cell.imageView.image = photoImage
+    cell.imageView.alpha = 0.5
     
     //Check if local image is available
     if let localImage = photo.image {
       dispatch_async(dispatch_get_main_queue()){
         cell.imageView.image = localImage
+        cell.imageView.alpha = 1.0
         cell.activityIndicatorView.stopAnimating()
       }
     }
@@ -189,6 +191,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
           // Use the error image
           dispatch_async(dispatch_get_main_queue()){
             cell.imageView.image = UIImage(named: "noImage")
+            cell.imageView.alpha = 1
             cell.activityIndicatorView.stopAnimating()
           }
         }
@@ -200,6 +203,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
           // Update the cell on the main thread
           dispatch_async(dispatch_get_main_queue()){
             cell.imageView.image = image
+            cell.imageView.alpha = 1.0
             cell.activityIndicatorView.stopAnimating()
           }
         }
@@ -208,11 +212,23 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     }
   }
   
+  func changeTextNewCollectionButton() {
+    if selectedIndexes.count > 0 {
+      newCollection.title = "Delete selected Photos"
+    }
+    else {
+      newCollection.title = "New Collection"
+    }
+  }
+  
   /**********************************************************************************************/
   /** Mark: - NSFetchedresults delegate methods **/
   // Will be added later
   
 }
+
+/**********************************************************************************************/
+  /** Mark: - UICollectionViewDataSource  methods **/
 
 extension LocationPhotos: UICollectionViewDataSource {
   
@@ -231,4 +247,38 @@ extension LocationPhotos: UICollectionViewDataSource {
     configureCell(cell, photo: photo)
     return cell
   }
+}
+
+/**********************************************************************************************/
+/** Mark: - UICollectionViewDelegate methods **/
+
+extension LocationPhotos: UICollectionViewDelegate {
+  
+  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
+    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+    
+    // if touched image was already selected, unselect it and remove it from selectedIndexes...
+    if let index = find(selectedIndexes, indexPath) {
+      selectedIndexes.removeAtIndex(index)
+      
+      // ... and unhiglight it
+      cell.selectedIcon.hidden = true
+      UIView.animateWithDuration(0.1, animations: {
+        cell.imageView.alpha = 1.0
+      })
+    }
+    // otherwise add it to the selectedIndexes...
+    else{
+      selectedIndexes.append(indexPath)
+      // ... and highlight its selection (reduce alpha and display check mark)
+      cell.selectedIcon.hidden = false
+      UIView.animateWithDuration(0.1, animations: {
+        cell.imageView.alpha = 0.5
+      })
+    }
+    // Update the new collection button title consequently
+    changeTextNewCollectionButton()
+  }
+  
 }
