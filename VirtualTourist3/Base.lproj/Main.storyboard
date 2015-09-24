@@ -29,6 +29,7 @@
                         <viewControllerLayoutGuide type="bottom" id="n4l-gi-AkO"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Y4E-lq-2qt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Vx0-bR-mac">
@@ -78,13 +79,13 @@
                                 <exclude reference="bTe-X5-M7T"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="DBi-J8-Eu2"/>
+                                <exclude reference="uDQ-jK-oYx"/>
                                 <exclude reference="O47-9t-h21"/>
                                 <exclude reference="PDx-ZW-BFx"/>
                                 <exclude reference="UD8-M4-efe"/>
                                 <exclude reference="nl2-Zk-H9G"/>
                                 <exclude reference="xpv-23-nAD"/>
-                                <exclude reference="DBi-J8-Eu2"/>
-                                <exclude reference="uDQ-jK-oYx"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -93,13 +94,13 @@
                                 <include reference="bTe-X5-M7T"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="DBi-J8-Eu2"/>
+                                <include reference="uDQ-jK-oYx"/>
                                 <include reference="O47-9t-h21"/>
                                 <include reference="PDx-ZW-BFx"/>
                                 <include reference="UD8-M4-efe"/>
                                 <include reference="nl2-Zk-H9G"/>
                                 <include reference="xpv-23-nAD"/>
-                                <include reference="DBi-J8-Eu2"/>
-                                <include reference="uDQ-jK-oYx"/>
                             </mask>
                         </variation>
                     </view>
@@ -136,6 +137,7 @@
                         <viewControllerLayoutGuide type="bottom" id="h9V-pe-yOs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7xM-en-K9D">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CrI-nC-TZ6">
@@ -152,25 +154,26 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDh-F0-aMB">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                     </variation>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="7iR-Ic-AMd">
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
                                                     <color key="color" red="1" green="0.29179774409999998" blue="0.3514072889" alpha="1" colorSpace="calibratedRGB"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                                        <rect key="frame" x="40" y="40" width="20" height="20"/>
                                                     </variation>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <size key="customSize" width="100" height="100"/>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="dDh-F0-aMB"/>
@@ -227,6 +230,7 @@
                                 <exclude reference="uwI-qu-ViQ"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="HR9-JY-Xy8"/>
                                 <exclude reference="AZe-aj-r2B"/>
                                 <exclude reference="b20-yI-3Tc"/>
                                 <exclude reference="rPI-ek-RvY"/>
@@ -237,7 +241,6 @@
                                 <exclude reference="geJ-0L-KF8"/>
                                 <exclude reference="hjh-L6-6A2"/>
                                 <exclude reference="v0P-bR-ixH"/>
-                                <exclude reference="HR9-JY-Xy8"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -247,6 +250,7 @@
                                 <include reference="uwI-qu-ViQ"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="HR9-JY-Xy8"/>
                                 <include reference="AZe-aj-r2B"/>
                                 <include reference="b20-yI-3Tc"/>
                                 <include reference="rPI-ek-RvY"/>
@@ -257,7 +261,6 @@
                                 <include reference="geJ-0L-KF8"/>
                                 <include reference="hjh-L6-6A2"/>
                                 <include reference="v0P-bR-ixH"/>
-                                <include reference="HR9-JY-Xy8"/>
                             </mask>
                         </variation>
                     </view>

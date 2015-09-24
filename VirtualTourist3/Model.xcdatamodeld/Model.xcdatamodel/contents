@@ -10,10 +10,10 @@
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="numberOfPages" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="photos" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Pin" positionX="-45" positionY="0" width="128" height="105"/>
         <element name="Photo" positionX="-18" positionY="54" width="128" height="105"/>
+        <element name="Pin" positionX="-45" positionY="0" width="128" height="105"/>
     </elements>
 </model>

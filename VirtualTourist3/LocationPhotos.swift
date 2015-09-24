@@ -47,12 +47,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     collectionView.dataSource = self
     
     // fetch data to see if we already have pin photos
-    var error: NSError?
-    fetchedResultsController.performFetch(&error)
-    if let error = error {
-      println("Error getting the data for the Pin")
-    }
-    fetchedResultsController.delegate = self
+    fetchDataFromCoreData()
   }
   
   override func viewWillAppear(animated: Bool) {
@@ -102,6 +97,8 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
                 let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                 photo.pin = self.receivedPin
                 // println("photo is: \(photo)")
+                println("Pin is: \(self.receivedPin)")
+                println("photo should be attached to pin: \(photo.pin)")
                 return photo
               }
               
@@ -119,7 +116,9 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
               **/
               
               dispatch_async(dispatch_get_main_queue()){
-                self.collectionView.reloadData()
+                CoreDataStackManager.sharedInstance().saveContext()
+                self.fetchDataFromCoreData()
+                self.collectionView?.reloadData()
               }
               
           } // end of if let photosDictionary
@@ -129,6 +128,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
           }
         }
       }
+      
     } // end of if Pin Photos is empty
   } // end of viewWillAppear
   
@@ -169,10 +169,60 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     
     }()
   
+  // Utility function to reload the fetchedResultsController
+  func fetchDataFromCoreData() {
+    var error: NSError?
+    fetchedResultsController.performFetch(&error)
+    if let error = error {
+      println("Error getting the data for the Pin")
+    }
+  }
+
+  
   /** Mark: - Configure cell **/
   
   func configureCell(cell: PhotoCell, photo: Photo) {
     
+    //start with the placeholder
+    var photoImage = UIImage(named: "photoPlaceHolder")
+    cell.imageView.image = photoImage
+    
+    //Check if local image is available
+    if let localImage = photo.image {
+      dispatch_async(dispatch_get_main_queue()){
+        cell.imageView.image = localImage
+        cell.activityIndicatorView.stopAnimating()
+      }
+    }
+    //If not, then download it
+    else{
+      let task = FlickrClient.sharedInstance().taskForImage(photo.imageURL, completionHandler: {
+        data, error in
+        if let error = error {
+          // print error
+          println("Image download error: \(error.localizedDescription)")
+          // Use the error image
+          dispatch_async(dispatch_get_main_queue()){
+            cell.imageView.image = UIImage(named: "noImage")
+            cell.activityIndicatorView.stopAnimating()
+          }
+        }
+        if let data = data {
+          // Create the image out of the data
+          let image = UIImage(data: data)
+          // Update the model
+          photo.image = image
+          // Update the cell on the main thread
+          dispatch_async(dispatch_get_main_queue()){
+            cell.imageView.image = image
+            cell.activityIndicatorView.stopAnimating()
+          }
+        }
+      })
+      cell.taskToCancelifCellIsReused = task
+    }
+    
+    /**
     var photoImage = UIImage(named: "photoPlaceHolder")
     cell.imageView!.image = nil
     
@@ -180,7 +230,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
       photoImage = UIImage(named: "noImage")
     }
     else if photo.image != nil {
-      println("photo.image != nil")
+      cell.activityIndicatorView.stopAnimating()
       photoImage = photo.image
     }
     else {
@@ -197,13 +247,15 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
           photo.image = image
           // Update the cell later on the main thread
           dispatch_async(dispatch_get_main_queue()){
+            cell.activityIndicatorView.stopAnimating()
             cell.imageView.image = image
           }
         }
       }
       cell.taskToCancelifCellIsReused = task
-    }
-    cell.imageView.image = photoImage
+    }**/
+    
+    //cell.imageView.image = photoImage
   }
   
   /** Mark: - NSFetchedresults delegate methods **/
@@ -215,10 +267,6 @@ extension LocationPhotos: UICollectionViewDataSource {
   
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
-      
-      //debug
-      println("sectionInfo Number of Objects is: \(sectionInfo.numberOfObjects)")
-      
       return sectionInfo.numberOfObjects
     }
     return 1
@@ -228,12 +276,8 @@ extension LocationPhotos: UICollectionViewDataSource {
     
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PhotoCell
     let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-    println("fetched photo is: \(photo)")
     
-    // debug: trying to simply show placeholders
-    cell.imageView.image = UIImage(named: "photoPlaceHolder")
-    
-    //configureCell(cell, photo: photo)
+    configureCell(cell, photo: photo)
     return cell
   }
 }
