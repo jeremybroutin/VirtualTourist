@@ -59,68 +59,21 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     
+    // Check for the Pin Photos and load them if we don't have already
     if receivedPin.photos.isEmpty {
-      
-      // Chose a random page to query photos from FlickR
-      var randomPage = 1
-      if let numberOfPages = receivedPin.numberOfPages {
-        // Because pin.numberOfPages is a NSNumber, we need to downcast it to an Int
-        let numberOfPagesAsInt = numberOfPages as! Int
-        randomPage = Int((arc4random_uniform(UInt32(numberOfPagesAsInt)))) + 1
-        // + 1 avoid returning the page 0 which doesn't exist
-      }
-      
-      // Set the parameters to be used in FlickR request
-      let parameters: [String: AnyObject] = [
-        FlickrClient.ParamKeys.APIKey: FlickrClient.Constants.APIKey,
-        FlickrClient.ParamKeys.Method: FlickrClient.Constants.SearchMethod,
-        FlickrClient.ParamKeys.Format: FlickrClient.ParamValues.JSONFormat,
-        FlickrClient.ParamKeys.NoJSONCallback: FlickrClient.ParamValues.NoJSONCallback,
-        FlickrClient.ParamKeys.Latitude: receivedPin.latitude,
-        FlickrClient.ParamKeys.Longitude: receivedPin.longitude,
-        FlickrClient.ParamKeys.Extras: FlickrClient.ParamValues.URL_M,
-        FlickrClient.ParamKeys.Page: randomPage,
-        FlickrClient.ParamKeys.PerPage: FlickrClient.ParamValues.PerPage
-      ]
-      
-      // Start task to download photos
-      FlickrClient.sharedInstance().taskForResources(parameters) { result, error in
+      FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
+        success, error in
+        if success {
+          self.fetchDataFromCoreData()
+          self.collectionView?.reloadData()
+        }
         if let error = error {
           println(error)
         }
-        else {
-          
-          if let photosDictionary = result.valueForKey(FlickrClient.JSONResponseKeys.Photos) as? [String:AnyObject],
-            let photosArray = photosDictionary[FlickrClient.JSONResponseKeys.Photo] as? [[String: AnyObject]],
-            let numberOfPhotoPages = photosDictionary[FlickrClient.JSONResponseKeys.Pages] as? Int {
-              
-              // Save and store the number of pages returned for the pin
-              self.receivedPin.numberOfPages = numberOfPhotoPages
-              
-              // Get photo url for each photo in returned array
-              var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
-                let photo = Photo(dictionary: dictionary, context: self.sharedContext)
-                photo.pin = self.receivedPin
-                return photo
-              }
-              
-              dispatch_async(dispatch_get_main_queue()){
-                CoreDataStackManager.sharedInstance().saveContext()
-                self.fetchDataFromCoreData()
-                self.collectionView?.reloadData()
-              }
-              
-          } // end of if let photosDictionary
-          else {
-            let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
-            println(error)
-          }
-        }
-      }
+      })
       
-    } // end of if Pin Photos is empty
-  } // end of viewWillAppear
-  
+    }
+  }
 
   override func viewDidLayoutSubviews() {
     //Layout the collectionView cells properly on the View
@@ -134,6 +87,32 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     layout.itemSize = CGSize(width: width, height: width)
     collectionView.collectionViewLayout = layout
   }
+  
+  /**********************************************************************************************/
+  /** Mark: - Actions **/
+  
+  @IBAction func tapNewCollectionButton(sender: UIBarButtonItem) {
+    
+    if selectedIndexes.count == 0 {
+      loadNewPhotosCollection()
+    }
+    else{
+      for index in selectedIndexes {
+        // Capture photo object for each index
+        let object = fetchedResultsController.objectAtIndexPath(index) as! Photo
+        // Remove it from Core Data
+        sharedContext.deleteObject(object)
+        // Save context
+        CoreDataStackManager.sharedInstance().saveContext()
+        
+        // And finally empty array and switch button title
+        selectedIndexes = []
+        println("index count after deletion is: \(selectedIndexes.count)")
+        changeTextNewCollectionButton()
+      }
+    }
+  }
+  
   
   /**********************************************************************************************/
   /** Mark: - Fetch Results Controller **/
@@ -166,7 +145,37 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   /**********************************************************************************************/
   /** Mark: - Utility methods **/
   
+  func loadNewPhotosCollection() {
+    
+    // Disable new collection button
+    newCollection.enabled = false
+    
+    // Start by deleting existing photos
+    let currentPhotos = fetchedResultsController.fetchedObjects as! [Photo]
+    for photo in currentPhotos{
+      sharedContext.deleteObject(photo)
+      collectionView.reloadData()
+    }
+    CoreDataStackManager.sharedInstance().saveContext()
+    
+    // Then get new photos
+    FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
+      success, error in
+      if success {
+        dispatch_async(dispatch_get_main_queue()){
+          CoreDataStackManager.sharedInstance().saveContext()
+          self.fetchDataFromCoreData()
+          //self.collectionView.reloadData()
+          self.newCollection.enabled = true
+        }
+      }
+    })
+  }
+  
   func configureCell(cell: PhotoCell, photo: Photo) {
+    
+    //Make sure the activity indicator is on
+    cell.activityIndicatorView.startAnimating()
     
     //start with the placeholder
     var photoImage = UIImage(named: "photoPlaceHolder")
@@ -221,64 +230,60 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     }
   }
   
-  /**********************************************************************************************/
-  /** Mark: - NSFetchedresults delegate methods **/
-  // Will be added later
-  
 }
 
-/**********************************************************************************************/
-  /** Mark: - UICollectionViewDataSource  methods **/
 
-extension LocationPhotos: UICollectionViewDataSource {
+
+/**********************************************************************************************/
+/** Mark: - NSFetchedResultsController methods **/
+
+extension LocationPhotos: NSFetchedResultsControllerDelegate {
   
-  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
-      return sectionInfo.numberOfObjects
+  func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    
+    //Prepare for changed content from Core Data
+    insertedIndexPaths = [NSIndexPath]()
+    deletedIndexPaths  = [NSIndexPath]()
+    updatedIndexPaths  = [NSIndexPath]()
+  }
+  
+  func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    
+    //Add the indexPath of the changed objects to the appropriate array, depending on the type of change
+    switch type {
+    case .Insert:
+      insertedIndexPaths.append(newIndexPath!)
+    case .Delete:
+      deletedIndexPaths.append(indexPath!)
+    case .Update:
+      updatedIndexPaths.append(indexPath!)
+
+    default:
+      break
     }
-    return 1
   }
   
-  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  func controllerDidChangeContent(controller: NSFetchedResultsController) {
     
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PhotoCell
-    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-    
-    configureCell(cell, photo: photo)
-    return cell
-  }
-}
-
-/**********************************************************************************************/
-/** Mark: - UICollectionViewDelegate methods **/
-
-extension LocationPhotos: UICollectionViewDelegate {
-  
-  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
-    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-    
-    // if touched image was already selected, unselect it and remove it from selectedIndexes...
-    if let index = find(selectedIndexes, indexPath) {
-      selectedIndexes.removeAtIndex(index)
+    //Check to make sure UI elements are correctly displayed.
+    if controller.fetchedObjects?.count > 0 {
       
-      // ... and unhiglight it
-      cell.selectedIcon.hidden = true
-      UIView.animateWithDuration(0.1, animations: {
-        cell.imageView.alpha = 1.0
-      })
+      //noImagesLabel.hidden = true
+      //newCollectionButton.enabled = true
     }
-    // otherwise add it to the selectedIndexes...
-    else{
-      selectedIndexes.append(indexPath)
-      // ... and highlight its selection (reduce alpha and display check mark)
-      cell.selectedIcon.hidden = false
-      UIView.animateWithDuration(0.1, animations: {
-        cell.imageView.alpha = 0.5
-      })
-    }
-    // Update the new collection button title consequently
-    changeTextNewCollectionButton()
+    
+    //Make the relevant updates to the collectionView once Core Data has finished its changes.
+    collectionView.performBatchUpdates({
+      for indexPath in self.insertedIndexPaths {
+        self.collectionView.insertItemsAtIndexPaths([indexPath])
+      }
+      for indexPath in self.deletedIndexPaths {
+        self.collectionView.deleteItemsAtIndexPaths([indexPath])
+      }
+      for indexPath in self.updatedIndexPaths {
+        self.collectionView.reloadItemsAtIndexPaths([indexPath])
+      }
+      }, completion: nil)
   }
-  
 }
+

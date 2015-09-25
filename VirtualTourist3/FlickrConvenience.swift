@@ -33,26 +33,28 @@ extension FlickrClient {
     
     // Set the parameters to be used in FlickR request
     let parameters: [String: AnyObject] = [
-      ParamKeys.APIKey: Constants.APIKey,
-      ParamKeys.Method: Constants.SearchMethod,
-      ParamKeys.Format: ParamValues.JSONFormat,
-      ParamKeys.NoJSONCallback: ParamValues.NoJSONCallback,
-      ParamKeys.Latitude: pin.latitude,
-      ParamKeys.Longitude: pin.longitude,
-      ParamKeys.Extras: ParamValues.URL_M,
-      ParamKeys.Page: randomPage,
-      ParamKeys.PerPage: ParamValues.PerPage
+      FlickrClient.ParamKeys.APIKey: FlickrClient.Constants.APIKey,
+      FlickrClient.ParamKeys.Method: FlickrClient.Constants.SearchMethod,
+      FlickrClient.ParamKeys.Format: FlickrClient.ParamValues.JSONFormat,
+      FlickrClient.ParamKeys.NoJSONCallback: FlickrClient.ParamValues.NoJSONCallback,
+      FlickrClient.ParamKeys.Latitude: pin.latitude,
+      FlickrClient.ParamKeys.Longitude: pin.longitude,
+      FlickrClient.ParamKeys.Extras: FlickrClient.ParamValues.URL_M,
+      FlickrClient.ParamKeys.Page: randomPage,
+      FlickrClient.ParamKeys.PerPage: FlickrClient.ParamValues.PerPage
     ]
     
-    // Call taskForResources to initiate task
-    taskForResources(parameters) { results, error in
+    // Start task to download photos
+    FlickrClient.sharedInstance().taskForResources(parameters) { result, error in
       if let error = error {
+        println(error)
         completionHandler(success: false, error: error)
       }
-      else{
-        if let photosDictionary = results.valueForKey(JSONResponseKeys.Photos) as? [String:AnyObject],
-          numberOfPhotoPages = photosDictionary[JSONResponseKeys.Pages] as? Int,
-          photosArray = photosDictionary[JSONResponseKeys.Photo] as? [[String: AnyObject]] {
+      else {
+        
+        if let photosDictionary = result.valueForKey(FlickrClient.JSONResponseKeys.Photos) as? [String:AnyObject],
+          let photosArray = photosDictionary[FlickrClient.JSONResponseKeys.Photo] as? [[String: AnyObject]],
+          let numberOfPhotoPages = photosDictionary[FlickrClient.JSONResponseKeys.Pages] as? Int {
             
             // Save and store the number of pages returned for the pin
             pin.numberOfPages = numberOfPhotoPages
@@ -61,11 +63,19 @@ extension FlickrClient {
             var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
               let photo = Photo(dictionary: dictionary, context: self.sharedContext)
               photo.pin = pin
-              return photo              
+              return photo
             }
-            dispatch_async(dispatch_get_main_queue()) {
-              // handler.collectionView.reloadData()
+            completionHandler(success: true, error: nil)
+            
+            dispatch_async(dispatch_get_main_queue()){
+              CoreDataStackManager.sharedInstance().saveContext()
             }
+            
+        } // end of if let photosDictionary
+        else {
+          let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
+          println(error)
+          completionHandler(success: false, error: nil)
         }
       }
     }

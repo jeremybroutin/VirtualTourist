@@ -23,6 +23,8 @@
 		E32587ED1BB0983F00CD20F3 /* FlickrConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587EC1BB0983F00CD20F3 /* FlickrConvenience.swift */; };
 		E32587EF1BB0A45400CD20F3 /* LocationPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587EE1BB0A45400CD20F3 /* LocationPhotos.swift */; };
 		E32587F11BB0A64900CD20F3 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32587F01BB0A64900CD20F3 /* PhotoCell.swift */; };
+		E3C03FCA1BB592B4005420FF /* LocationPhotos_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C03FC91BB592B4005420FF /* LocationPhotos_Delegate.swift */; };
+		E3C03FCC1BB5933D005420FF /* LocationPhotos_DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C03FCB1BB5933D005420FF /* LocationPhotos_DataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		E32587EC1BB0983F00CD20F3 /* FlickrConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrConvenience.swift; sourceTree = "<group>"; };
 		E32587EE1BB0A45400CD20F3 /* LocationPhotos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPhotos.swift; sourceTree = "<group>"; };
 		E32587F01BB0A64900CD20F3 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		E3C03FC91BB592B4005420FF /* LocationPhotos_Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPhotos_Delegate.swift; sourceTree = "<group>"; };
+		E3C03FCB1BB5933D005420FF /* LocationPhotos_DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPhotos_DataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,8 @@
 			children = (
 				E32587D81BB0625C00CD20F3 /* TravelMap.swift */,
 				E32587EE1BB0A45400CD20F3 /* LocationPhotos.swift */,
+				E3C03FCB1BB5933D005420FF /* LocationPhotos_DataSource.swift */,
+				E3C03FC91BB592B4005420FF /* LocationPhotos_Delegate.swift */,
 				E32587DA1BB06D2D00CD20F3 /* CoreDataStackManager.swift */,
 			);
 			name = Controller;
@@ -215,6 +221,11 @@
 				TargetAttributes = {
 					E32587B21BB061F300CD20F3 = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					E32587C71BB061F300CD20F3 = {
 						CreatedOnToolsVersion = 6.4;
@@ -266,8 +277,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3C03FCC1BB5933D005420FF /* LocationPhotos_DataSource.swift in Sources */,
 				E32587D91BB0625C00CD20F3 /* TravelMap.swift in Sources */,
 				E32587EF1BB0A45400CD20F3 /* LocationPhotos.swift in Sources */,
+				E3C03FCA1BB592B4005420FF /* LocationPhotos_Delegate.swift in Sources */,
 				E32587EB1BB0870500CD20F3 /* FlickrConstants.swift in Sources */,
 				E32587B91BB061F300CD20F3 /* AppDelegate.swift in Sources */,
 				E32587E91BB0732100CD20F3 /* ImageCache.swift in Sources */,
@@ -473,6 +486,7 @@
 				E32587D41BB061F300CD20F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E32587D51BB061F300CD20F3 /* Build configuration list for PBXNativeTarget "VirtualTourist3Tests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +495,7 @@
 				E32587D71BB061F300CD20F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

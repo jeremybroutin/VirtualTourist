@@ -248,7 +248,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Jde-1F-K3C"/>
-                                    <barButtonItem title="New Collection" id="Ukf-aJ-oOy"/>
+                                    <barButtonItem title="New Collection" id="Ukf-aJ-oOy">
+                                        <connections>
+                                            <action selector="tapNewCollectionButton:" destination="JtU-RE-hZs" id="L0R-pr-MeQ"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EKm-l6-Yc9"/>
                                 </items>
                             </toolbar>
