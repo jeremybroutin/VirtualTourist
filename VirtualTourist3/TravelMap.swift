@@ -74,6 +74,14 @@ class TravelMap: UIViewController, MKMapViewDelegate {
       ]
       //create a Pin object with coordinates from touch point
       pinToBeAdded = Pin(dictionary: dictionary, context: sharedContext)
+      FlickrClient.sharedInstance().getPhotosForPin(pinToBeAdded!, completionHandler: {
+        success, error in
+        if success{
+          dispatch_async(dispatch_get_main_queue()){
+            CoreDataStackManager.sharedInstance().saveContext()
+          }
+        }
+      })
       //save it to core data
       CoreDataStackManager.sharedInstance().saveContext()
       //add it to the map
@@ -127,7 +135,7 @@ class TravelMap: UIViewController, MKMapViewDelegate {
   
   
   /** Mark: - Map Delegate **/
-
+  
   func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
     self.saveMapRegion()
   }
@@ -163,7 +171,7 @@ class TravelMap: UIViewController, MKMapViewDelegate {
       // Save the new context
       CoreDataStackManager.sharedInstance().saveContext()
     }
-    // Otherwise go to the next view controller
+      // Otherwise go to the next view controller
     else {
       let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPhotos") as! LocationPhotos
       let pin = view.annotation as! Pin

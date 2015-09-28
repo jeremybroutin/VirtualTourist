@@ -62,15 +62,25 @@ extension FlickrClient {
             // Get photo url for each photo in returned array
             var photos = photosArray.map() { (dictionary: [String: AnyObject]) -> Photo in
               let photo = Photo(dictionary: dictionary, context: self.sharedContext)
+              
+              //get image for the photo
+              self.taskForImage(photo.imageURL, completionHandler: {
+                imageData, error in
+                if let error = error {
+                  println("error getting image for photo")
+                }
+                if let imageData = imageData {
+                  println("imageData successful")
+                  let image = UIImage(data: imageData)
+                  photo.image = image
+                }
+                dispatch_async(dispatch_get_main_queue()){
+                  CoreDataStackManager.sharedInstance().saveContext()
+                }
+              })
               photo.pin = pin
               return photo
             }
-            completionHandler(success: true, error: nil)
-            
-            dispatch_async(dispatch_get_main_queue()){
-              CoreDataStackManager.sharedInstance().saveContext()
-            }
-            
         } // end of if let photosDictionary
         else {
           let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)

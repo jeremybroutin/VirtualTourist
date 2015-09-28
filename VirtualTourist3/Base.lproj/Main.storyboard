@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tfm-hH-TnP">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -165,7 +166,7 @@
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
                                                     <color key="color" red="1" green="0.29179774409999998" blue="0.3514072889" alpha="1" colorSpace="calibratedRGB"/>
                                                 </activityIndicatorView>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="selectedicon" translatesAutoresizingMaskIntoConstraints="NO" id="gcq-Vi-GZy">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="selectIcon" translatesAutoresizingMaskIntoConstraints="NO" id="gcq-Vi-GZy">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 </imageView>
                                             </subviews>
@@ -201,6 +202,7 @@
                                                 <exclude reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="DzP-Ih-Glx"/>
                                                 <exclude reference="7jC-XX-IwK"/>
                                                 <exclude reference="he5-lH-7JO"/>
                                                 <exclude reference="ivM-Zh-aoZ"/>
@@ -212,7 +214,6 @@
                                                 <exclude reference="f0f-Am-fwo"/>
                                                 <exclude reference="l4G-Aj-ygU"/>
                                                 <exclude reference="qEa-fk-Krk"/>
-                                                <exclude reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -222,6 +223,7 @@
                                                 <include reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <include reference="DzP-Ih-Glx"/>
                                                 <include reference="7jC-XX-IwK"/>
                                                 <include reference="he5-lH-7JO"/>
                                                 <include reference="ivM-Zh-aoZ"/>
@@ -233,7 +235,6 @@
                                                 <include reference="f0f-Am-fwo"/>
                                                 <include reference="l4G-Aj-ygU"/>
                                                 <include reference="qEa-fk-Krk"/>
-                                                <include reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -250,7 +251,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Jde-1F-K3C"/>
                                     <barButtonItem title="New Collection" id="Ukf-aJ-oOy">
                                         <connections>
-                                            <action selector="tapNewCollectionButton:" destination="JtU-RE-hZs" id="L0R-pr-MeQ"/>
+                                            <action selector="tapNewCollection:" destination="JtU-RE-hZs" id="52b-Eq-51p"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EKm-l6-Yc9"/>
@@ -331,6 +332,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="selectedicon" width="25" height="25"/>
+        <image name="selectIcon" width="25" height="25"/>
     </resources>
 </document>

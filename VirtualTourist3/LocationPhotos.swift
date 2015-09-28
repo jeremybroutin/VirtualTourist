@@ -10,7 +10,8 @@ import UIKit
 import MapKit
 import CoreData
 
-class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDelegate,
+UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
   
   /** Mark: - Outlets **/
   
@@ -36,6 +37,7 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
   }
   
   /**********************************************************************************************/
+  
   /** Mark: - App Life Cycle **/
   
   override func viewDidLoad() {
@@ -52,29 +54,41 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     collectionView.delegate = self
     collectionView.dataSource = self
     
-    // fetch data to see if we already have pin photos
-    fetchDataFromCoreData()
+    // start the fetched results controller
+    var error: NSError?
+    fetchedResultsController.performFetch(&error)
+    if let error = error {
+      println("Error performing initial fetch: \(error)")
+    }
+    fetchedResultsController.delegate = self
   }
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     
-    // Check for the Pin Photos and load them if we don't have already
     if receivedPin.photos.isEmpty {
-      FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
-        success, error in
-        if success {
-          self.fetchDataFromCoreData()
-          self.collectionView?.reloadData()
-        }
-        if let error = error {
-          println(error)
-        }
-      })
+      
+      println("receivedPin.photos is empty")
+      
+      //display empty list message
+      var emptyList : UILabel
+      emptyList = UILabel(frame: CGRectMake(0, 0, self.collectionView!.bounds.size.width, self.collectionView!.bounds.size.height))
+      emptyList.contentMode = UIViewContentMode.ScaleAspectFit
+      emptyList.textAlignment = NSTextAlignment.Center
+      emptyList.font = UIFont (name: "AppleSDGothicNeo-Thin", size: 20)
+      emptyList.numberOfLines = 2
+      emptyList.lineBreakMode = NSLineBreakMode.ByWordWrapping
+      emptyList.preferredMaxLayoutWidth = 200
+      emptyList.textColor = UIColor.lightGrayColor()
+      emptyList.text = "Sorry, there is no photo for this location!"
+      
+      //set back to label view
+      self.collectionView!.backgroundView = emptyList;
       
     }
   }
-
+  
+  
   override func viewDidLayoutSubviews() {
     //Layout the collectionView cells properly on the View
     let layout = UICollectionViewFlowLayout()
@@ -88,33 +102,157 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     collectionView.collectionViewLayout = layout
   }
   
-  /**********************************************************************************************/
-  /** Mark: - Actions **/
   
-  @IBAction func tapNewCollectionButton(sender: UIBarButtonItem) {
+    /**********************************************************************************************/
+  
+  /** Mark: - IBActions **/
+  
+  @IBAction func tapNewCollection(sender: AnyObject) {
     
     if selectedIndexes.count == 0 {
-      loadNewPhotosCollection()
+      // load new set of photos
+      self.loadNewPhotos()
     }
-    else{
+    else {
+      // delete selected photos
       for index in selectedIndexes {
-        // Capture photo object for each index
-        let object = fetchedResultsController.objectAtIndexPath(index) as! Photo
-        // Remove it from Core Data
-        sharedContext.deleteObject(object)
-        // Save context
-        CoreDataStackManager.sharedInstance().saveContext()
-        
-        // And finally empty array and switch button title
-        selectedIndexes = []
-        println("index count after deletion is: \(selectedIndexes.count)")
-        changeTextNewCollectionButton()
+        let photoToDelete = fetchedResultsController.objectAtIndexPath(index) as! Photo
+        sharedContext.deleteObject(photoToDelete)
+      }
+      // clean selectedIndexes array
+      selectedIndexes = []
+      // change button text
+      changeTextNewCollectionButton()
+      // save everything
+      CoreDataStackManager.sharedInstance().saveContext()
+    }
+  }
+  
+  /**********************************************************************************************/
+  
+  /** Mark: - Utility methods **/
+  
+  // Load cells with proper images
+  func configureCell(cell: PhotoCell, photo: Photo) {
+    
+    // make sure the selectedicon is hidden
+    cell.selectedIcon.hidden = true
+    
+    //start with the placeholder
+    var photoImage = UIImage(named: "photoPlaceHolder")
+    cell.activityIndicatorView.startAnimating()
+    cell.imageView.image = photoImage
+    cell.imageView.alpha = 0.5
+    
+    //Check if local image is available
+    if let localImage = photo.image {
+      dispatch_async(dispatch_get_main_queue()){
+        cell.imageView.image = localImage
+        cell.imageView.alpha = 1.0
+        cell.activityIndicatorView.stopAnimating()
+      }
+    }
+      // if no local image, return the no image icon
+    else {
+      dispatch_async(dispatch_get_main_queue()){
+        cell.imageView.image = UIImage(named:"noImage")
+        cell.imageView.alpha = 1.0
+        cell.activityIndicatorView.stopAnimating()
       }
     }
   }
   
   
+  // Handle bottom button title changes
+  func changeTextNewCollectionButton() {
+    if selectedIndexes.count > 0 {
+      newCollection.title = "Delete selected Photos"
+    }
+    else {
+      newCollection.title = "New Collection"
+    }
+  }
+  
+  // Query new photos when New Collection is tapped
+  func loadNewPhotos() {
+    // 1 - Delete existing photos
+    for photo in fetchedResultsController.fetchedObjects as! [Photo]{
+      sharedContext.deleteObject(photo)
+    }
+    CoreDataStackManager.sharedInstance().saveContext()
+    
+    // 2 - Get new set of photos
+    FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
+      success, error in
+      if success{
+        dispatch_async(dispatch_get_main_queue()){
+          CoreDataStackManager.sharedInstance().saveContext()
+        }
+      }
+      else{
+        dispatch_async(dispatch_get_main_queue()){
+          println("error while getting a new set of photos")
+        }
+      }
+    })
+  }
+  
+
+
   /**********************************************************************************************/
+
+  /** Mark: - UICollectionViewDataSource  methods **/
+  
+  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    let sectionInfo = self.fetchedResultsController.sections?[section] as! NSFetchedResultsSectionInfo
+    return sectionInfo.numberOfObjects
+  }
+  
+  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PhotoCell
+    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+    
+    
+    
+    configureCell(cell, photo: photo)
+    return cell
+  }
+
+  
+  /**********************************************************************************************/
+
+  /** Mark: - UICollectionViewDelegate methods **/
+  
+  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
+    let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+    
+    // if touched image was already selected, unselect it and remove it from selectedIndexes...
+    if let index = find(selectedIndexes, indexPath) {
+      selectedIndexes.removeAtIndex(index)
+      
+      // ... and unhiglight it
+      cell.selectedIcon.hidden = true
+      UIView.animateWithDuration(0.1, animations: {
+        cell.imageView.alpha = 1.0
+      })
+    }
+      // otherwise add it to the selectedIndexes...
+    else{
+      selectedIndexes.append(indexPath)
+      // ... and highlight its selection (reduce alpha and display check mark)
+      cell.selectedIcon.hidden = false
+      UIView.animateWithDuration(0.1, animations: {
+        cell.imageView.alpha = 0.5
+      })
+    }
+    // Update the new collection button title consequently
+    changeTextNewCollectionButton()
+  }
+
+  /**********************************************************************************************/
+  
   /** Mark: - Fetch Results Controller **/
   
   lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -133,156 +271,59 @@ class LocationPhotos: UIViewController, MKMapViewDelegate, UICollectionViewDeleg
     
     }()
   
-  // Utility function to reload the fetchedResultsController
-  func fetchDataFromCoreData() {
-    var error: NSError?
-    fetchedResultsController.performFetch(&error)
-    if let error = error {
-      println("Error getting the data for the Pin")
-    }
-  }
-
+  
   /**********************************************************************************************/
-  /** Mark: - Utility methods **/
   
-  func loadNewPhotosCollection() {
-    
-    // Disable new collection button
-    newCollection.enabled = false
-    
-    // Start by deleting existing photos
-    let currentPhotos = fetchedResultsController.fetchedObjects as! [Photo]
-    for photo in currentPhotos{
-      sharedContext.deleteObject(photo)
-      collectionView.reloadData()
-    }
-    CoreDataStackManager.sharedInstance().saveContext()
-    
-    // Then get new photos
-    FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
-      success, error in
-      if success {
-        dispatch_async(dispatch_get_main_queue()){
-          CoreDataStackManager.sharedInstance().saveContext()
-          self.fetchDataFromCoreData()
-          //self.collectionView.reloadData()
-          self.newCollection.enabled = true
-        }
-      }
-    })
-  }
-  
-  func configureCell(cell: PhotoCell, photo: Photo) {
-    
-    //Make sure the activity indicator is on
-    cell.activityIndicatorView.startAnimating()
-    
-    //start with the placeholder
-    var photoImage = UIImage(named: "photoPlaceHolder")
-    cell.imageView.image = photoImage
-    cell.imageView.alpha = 0.5
-    
-    //Check if local image is available
-    if let localImage = photo.image {
-      dispatch_async(dispatch_get_main_queue()){
-        cell.imageView.image = localImage
-        cell.imageView.alpha = 1.0
-        cell.activityIndicatorView.stopAnimating()
-      }
-    }
-    //If not, then download it
-    else{
-      let task = FlickrClient.sharedInstance().taskForImage(photo.imageURL, completionHandler: {
-        data, error in
-        if let error = error {
-          // print error
-          println("Image download error: \(error.localizedDescription)")
-          // Use the error image
-          dispatch_async(dispatch_get_main_queue()){
-            cell.imageView.image = UIImage(named: "noImage")
-            cell.imageView.alpha = 1
-            cell.activityIndicatorView.stopAnimating()
-          }
-        }
-        if let data = data {
-          // Create the image out of the data
-          let image = UIImage(data: data)
-          // Update the model
-          photo.image = image
-          // Update the cell on the main thread
-          dispatch_async(dispatch_get_main_queue()){
-            cell.imageView.image = image
-            cell.imageView.alpha = 1.0
-            cell.activityIndicatorView.stopAnimating()
-          }
-        }
-      })
-      cell.taskToCancelifCellIsReused = task
-    }
-  }
-  
-  func changeTextNewCollectionButton() {
-    if selectedIndexes.count > 0 {
-      newCollection.title = "Delete selected Photos"
-    }
-    else {
-      newCollection.title = "New Collection"
-    }
-  }
-  
-}
-
-
-
-/**********************************************************************************************/
-/** Mark: - NSFetchedResultsController methods **/
-
-extension LocationPhotos: NSFetchedResultsControllerDelegate {
+  /** Mark: - NSFetchedResultsController Delegate **/
   
   func controllerWillChangeContent(controller: NSFetchedResultsController) {
     
-    //Prepare for changed content from Core Data
     insertedIndexPaths = [NSIndexPath]()
     deletedIndexPaths  = [NSIndexPath]()
     updatedIndexPaths  = [NSIndexPath]()
+    
+    println("in controllerWillChangeContent")
   }
   
-  func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-    
-    //Add the indexPath of the changed objects to the appropriate array, depending on the type of change
-    switch type {
-    case .Insert:
-      insertedIndexPaths.append(newIndexPath!)
-    case .Delete:
-      deletedIndexPaths.append(indexPath!)
-    case .Update:
-      updatedIndexPaths.append(indexPath!)
-
-    default:
-      break
-    }
+  func controller(controller: NSFetchedResultsController,
+    didChangeObject anObject: AnyObject,
+    atIndexPath indexPath: NSIndexPath?,
+    forChangeType type: NSFetchedResultsChangeType,
+    newIndexPath: NSIndexPath?) {
+      
+      switch type {
+      case .Insert:
+        insertedIndexPaths.append(newIndexPath!)
+        println("Insert an item")
+      case .Delete:
+        deletedIndexPaths.append(indexPath!)
+        ("Delete an item")
+      case .Update:
+        updatedIndexPaths.append(indexPath!)
+        println("Update an item.")
+      default:
+        break
+      }
   }
   
   func controllerDidChangeContent(controller: NSFetchedResultsController) {
     
-    //Check to make sure UI elements are correctly displayed.
-    if controller.fetchedObjects?.count > 0 {
-      
-      //noImagesLabel.hidden = true
-      //newCollectionButton.enabled = true
-    }
+    println("in controllerDidChangeContent. Changes.count: \(insertedIndexPaths.count + deletedIndexPaths.count)")
     
-    //Make the relevant updates to the collectionView once Core Data has finished its changes.
-    collectionView.performBatchUpdates({
+    collectionView.performBatchUpdates({() -> Void in
+      
       for indexPath in self.insertedIndexPaths {
         self.collectionView.insertItemsAtIndexPaths([indexPath])
       }
+      
       for indexPath in self.deletedIndexPaths {
         self.collectionView.deleteItemsAtIndexPaths([indexPath])
       }
+      
       for indexPath in self.updatedIndexPaths {
         self.collectionView.reloadItemsAtIndexPaths([indexPath])
       }
+      
       }, completion: nil)
   }
 }
