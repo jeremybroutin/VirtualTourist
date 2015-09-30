@@ -64,16 +64,8 @@ extension FlickrClient {
               let photo = Photo(dictionary: dictionary, context: self.sharedContext)
               
               //get image for the photo
-              self.taskForImage(photo.imageURL, completionHandler: {
-                imageData, error in
-                if let error = error {
-                  println("error getting image for photo")
-                }
-                if let imageData = imageData {
-                  println("imageData successful")
-                  let image = UIImage(data: imageData)
-                  photo.image = image
-                }
+              self.getImageForPhoto(photo, completionHandler: {
+                success, error in
                 dispatch_async(dispatch_get_main_queue()){
                   CoreDataStackManager.sharedInstance().saveContext()
                 }
@@ -81,6 +73,7 @@ extension FlickrClient {
               photo.pin = pin
               return photo
             }
+            completionHandler(success: true, error: nil)
         } // end of if let photosDictionary
         else {
           let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
@@ -89,6 +82,25 @@ extension FlickrClient {
         }
       }
     }
+  }
+  
+  // Helper function to get 
+  func getImageForPhoto(photo: Photo, completionHandler: (success: Bool, error: NSError?)-> Void) {
+    let imageURL = photo.imageURL
+    taskForImage(imageURL, completionHandler: {
+      imageData, error in
+      if let error = error {
+        println("error getting image for photo")
+        photo.image = UIImage(named: "noImage")
+        completionHandler(success: false, error: error)
+      }
+      if let imageData = imageData {
+        let image = UIImage(data: imageData)
+        photo.image = image
+        completionHandler(success: true, error: nil)
+      }
+      
+    })
   }
   
 }

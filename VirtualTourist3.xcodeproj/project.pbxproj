@@ -157,8 +157,8 @@
 			children = (
 				E32587B81BB061F300CD20F3 /* AppDelegate.swift */,
 				E32587DA1BB06D2D00CD20F3 /* CoreDataStackManager.swift */,
-				E32587EE1BB0A45400CD20F3 /* LocationPhotos.swift */,
 				E32587D81BB0625C00CD20F3 /* TravelMap.swift */,
+				E32587EE1BB0A45400CD20F3 /* LocationPhotos.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
