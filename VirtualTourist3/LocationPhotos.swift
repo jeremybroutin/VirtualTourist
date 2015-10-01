@@ -138,13 +138,9 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     
     //Check if local image is available
     if let localImage = photo.image {
-      println("configureCell - photoImage unwrapping: full")
       cell.imageView.image = localImage
       cell.imageView.alpha = 1.0
       cell.activityIndicatorView.stopAnimating()
-    }
-    else{
-      println("configureCell - photoImage unwrapping: empty")
     }
   }
   
@@ -175,7 +171,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
       success, error in
       if success{
         //debug
-        println("loadNewPhotos - getPhotosForPin - success true")
         dispatch_async(dispatch_get_main_queue()){
           CoreDataStackManager.sharedInstance().saveContext()
           // Re enable new collection button
@@ -184,7 +179,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
       }
       else{
         //debug
-        println("loadNewPhotos - getPhotosForPin - success false")
         dispatch_async(dispatch_get_main_queue()){
           self.noImage.hidden = false
           self.newCollection.enabled = false
