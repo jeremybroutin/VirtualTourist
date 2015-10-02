@@ -27,6 +27,8 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     let url = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
     return url.URLByAppendingPathComponent(fileName).path!
   }
+  // Get a reference to the NSUserDefaults class
+  let preferences = NSUserDefaults.standardUserDefaults()
   
   /** Mark: - Core Data Context **/
   
@@ -50,6 +52,31 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     
   }
   
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    // show initial tip for new users -->
+    
+    // don't show the alert if the user already dismissed it in the past
+    if preferences.stringForKey("tipDismissed") == nil {
+      // only show the tip once per session
+      if preferences.stringForKey("tipSeenInSession") == nil {
+        
+        // if not display the tip
+        let title = "Virtual Tourist Help"
+        let message = "Get started: Tap the map to drop a pin!"
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        let actionBis = UIAlertAction(title: "Don't show again",style: .Default) { (action) in
+          // set and store the NSUserDefault tipDimissed value
+          self.preferences.setValue("yes", forKey: "tipDismissed")
+        }
+        Alert.sharedInstance().createAlert(self, title: title, message: message, action: action, actionBis: actionBis)
+        
+        // set and store a NSUserDefault value for tipSeenInSession
+        self.preferences.setValue("yes", forKey: "tipSeenInSession")
+      }
+    }
+  }
   
   /** Mark: - IBActions **/
   
@@ -122,13 +149,14 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     return results as! [Pin]
   }
   
+  /**
   // Create alert
   func createAlert(title: String, message: String, action: UIAlertAction?) {
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
     let action = action
     alertController.addAction(action!)
     self.presentViewController(alertController, animated: true, completion: nil)
-  }
+  }**/
   
   /** Mark: - Helper functions for map region **/
   
@@ -176,7 +204,8 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     let title = "The map could not be loaded"
     let message = "Check your connexion or retry later"
     let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
-    createAlert(title, message: message, action: action)
+    Alert.sharedInstance().createAlert(self, title: title, message: message, action: action, actionBis: nil)
+    //createAlert(title, message: message, action: action)
   }
   
   func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {

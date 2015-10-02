@@ -41,12 +41,21 @@
                                     <outletCollection property="gestureRecognizers" destination="M9u-WI-Rma" appends="YES" id="0Qj-I4-KBz"/>
                                 </connections>
                             </mapView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rTW-HW-0lf">
+                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                <color key="color" red="1" green="0.2577073211" blue="0.30710643030000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="182" y="281" width="37" height="37"/>
+                                </variation>
+                            </activityIndicatorView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap a Pin to delete it" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bTe-X5-M7T">
                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                <color key="backgroundColor" red="1" green="0.29179774409721537" blue="0.35140728891584028" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.24335864559586251" blue="0.24147470711892005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="PAK-ld-5ym"/>
-                                    <constraint firstAttribute="width" constant="400" id="flM-Ch-b3d"/>
+                                    <constraint firstAttribute="width" constant="400" id="flM-Ch-b3d">
+                                        <variation key="widthClass=compact" constant="346"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="19"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -64,29 +73,28 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rTW-HW-0lf">
-                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
-                                <color key="color" red="1" green="0.2577073211" blue="0.30710643030000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="182" y="281" width="37" height="37"/>
-                                </variation>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="bTe-X5-M7T" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="DBi-J8-Eu2"/>
+                            <constraint firstItem="bTe-X5-M7T" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="DBi-J8-Eu2">
+                                <variation key="widthClass=compact" constant="-20"/>
+                            </constraint>
                             <constraint firstItem="Vx0-bR-mac" firstAttribute="top" secondItem="Y4E-lq-2qt" secondAttribute="top" id="O47-9t-h21"/>
                             <constraint firstItem="Vx0-bR-mac" firstAttribute="leading" secondItem="Y4E-lq-2qt" secondAttribute="leading" id="PDx-ZW-BFx"/>
                             <constraint firstItem="Vx0-bR-mac" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="UD8-M4-efe"/>
-                            <constraint firstItem="Vx0-bR-mac" firstAttribute="leading" secondItem="bTe-X5-M7T" secondAttribute="leading" id="nl2-Zk-H9G"/>
-                            <constraint firstItem="bTe-X5-M7T" firstAttribute="trailing" secondItem="Vx0-bR-mac" secondAttribute="trailing" id="uDQ-jK-oYx"/>
+                            <constraint firstItem="Vx0-bR-mac" firstAttribute="leading" secondItem="bTe-X5-M7T" secondAttribute="leading" id="nl2-Zk-H9G">
+                                <variation key="widthClass=compact" constant="-27"/>
+                            </constraint>
+                            <constraint firstItem="bTe-X5-M7T" firstAttribute="trailing" secondItem="Vx0-bR-mac" secondAttribute="trailing" id="uDQ-jK-oYx">
+                                <variation key="widthClass=compact" constant="-27"/>
+                            </constraint>
                             <constraint firstAttribute="trailing" secondItem="Vx0-bR-mac" secondAttribute="trailing" id="xpv-23-nAD"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="Vx0-bR-mac"/>
-                                <exclude reference="bTe-X5-M7T"/>
                                 <exclude reference="rTW-HW-0lf"/>
+                                <exclude reference="bTe-X5-M7T"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="DBi-J8-Eu2"/>
@@ -101,8 +109,8 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="Vx0-bR-mac"/>
-                                <include reference="bTe-X5-M7T"/>
                                 <include reference="rTW-HW-0lf"/>
+                                <include reference="bTe-X5-M7T"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="DBi-J8-Eu2"/>

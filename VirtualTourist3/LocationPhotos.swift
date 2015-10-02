@@ -139,18 +139,21 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     // make sure the selectedicon is hidden
     cell.selectedIcon.hidden = true
     
-    //start with the placeholder
+    // start with the placeholder
     var photoImage = UIImage(named: "photoPlaceHolder")
     cell.activityIndicatorView.startAnimating()
     cell.imageView.image = photoImage
     cell.imageView.alpha = 0.5
     
-    //Check if local image is available
-    if let localImage = photo.image {
-      cell.imageView.image = localImage
-      cell.imageView.alpha = 1.0
-      cell.activityIndicatorView.stopAnimating()
+    // check if local image is available
+    if photo.imageFilePath != nil {
+      if let localImage = photo.image {
+        cell.imageView.image = localImage
+        cell.imageView.alpha = 1.0
+        cell.activityIndicatorView.stopAnimating()
+      }
     }
+
   }
   
   // Handle bottom button title changes
