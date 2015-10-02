@@ -83,8 +83,6 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     
       // pin is dropped
     case .Ended:
-      //debug
-      println("pin coordinates are: \(pinToBeAdded?.coordinate.latitude), \(pinToBeAdded?.coordinate.longitude)")
       // download photos and images for the pin
       FlickrClient.sharedInstance().getPhotosForPin(pinToBeAdded!, completionHandler: {
         success, error in

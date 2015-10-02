@@ -30,6 +30,8 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
   var updatedIndexPaths : [NSIndexPath]!
   // Cell identifier
   var reuseIdentifier = "PhotoLocationCell"
+  // Error message for fetching
+  var errorfetchingMessage = "Oups, an error occured for this Pin! Try dropping another one."
   
   /** Mark: - Core Data Context **/
   
@@ -55,11 +57,18 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     collectionView.delegate = self
     collectionView.dataSource = self
     
+    // make sure the noImage label stays hidden
+    noImage.hidden = true
+    
     // start the fetched results controller
     var error: NSError?
     fetchedResultsController.performFetch(&error)
+    
+    // if it throws an error, inform users
     if let error = error {
-      println("Error performing initial fetch: \(error)")
+      noImage.text = errorfetchingMessage
+      noImage.hidden = false
+      newCollection.enabled = false
     }
     // check if the fetched data is empty
     if fetchedResultsController.fetchedObjects?.count == 0 {
@@ -170,7 +179,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     FlickrClient.sharedInstance().getPhotosForPin(receivedPin, completionHandler: {
       success, error in
       if success{
-        //debug
         dispatch_async(dispatch_get_main_queue()){
           CoreDataStackManager.sharedInstance().saveContext()
           // Re enable new collection button
@@ -178,7 +186,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
         }
       }
       else{
-        //debug
         dispatch_async(dispatch_get_main_queue()){
           self.noImage.hidden = false
           self.newCollection.enabled = false
@@ -281,9 +288,7 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     insertedIndexPaths = [NSIndexPath]()
     deletedIndexPaths  = [NSIndexPath]()
     updatedIndexPaths  = [NSIndexPath]()
-    
-    // debug
-    println("in controllerWillChangeContent")
+
   }
   
   func controller(controller: NSFetchedResultsController,
@@ -305,9 +310,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
   }
   
   func controllerDidChangeContent(controller: NSFetchedResultsController) {
-    
-    // debug
-    println("in controllerDidChangeContent. Changes.count: \(insertedIndexPaths.count + deletedIndexPaths.count)")
     
     // Hide/Enable items consequent to the changes
     if controller.fetchedObjects?.count > 0 {

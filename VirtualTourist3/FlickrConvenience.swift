@@ -45,9 +45,8 @@ extension FlickrClient {
     ]
     
     // Start task to download photos
-    FlickrClient.sharedInstance().taskForResources(parameters) { result, error in
+    taskForResources(parameters) { result, error in
       if let error = error {
-        println(error)
         completionHandler(success: false, error: error)
       }
       else {
@@ -77,8 +76,7 @@ extension FlickrClient {
         } // end of if let photosDictionary
         else {
           let error = NSError(domain: "Photo for Pin Parsing. Cant find photo in \(result)", code: 0, userInfo: nil)
-          println(error)
-          completionHandler(success: false, error: nil)
+          completionHandler(success: false, error: error)
         }
       }
     }
@@ -92,13 +90,10 @@ extension FlickrClient {
     taskForImage(imageURL!, completionHandler: {
       imageData, error in
       if let error = error {
-        println("error getting image for photo")
-        //photo.image = UIImage(named: "noImage")
         completionHandler(success: false, error: error)
       }
       if let imageData = imageData {
         let image = UIImage(data: imageData)
-        //photo.image = image
         
         // store image file in document directory
         let fileName = imageURL!.lastPathComponent

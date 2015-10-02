@@ -28,8 +28,6 @@ class CoreDataStackManager {
   
   lazy var applicationDocumentsDirectory: NSURL = {
     
-    println("Instantiating the applicationDocumentsDirectory property")
-    
     let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
     return urls[urls.count-1] as! NSURL
     }()
@@ -37,16 +35,12 @@ class CoreDataStackManager {
   lazy var managedObjectModel: NSManagedObjectModel = {
     // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
     
-    println("Instantiating the managedObjectModel property")
-    
     let modelURL = NSBundle.mainBundle().URLForResource("Model", withExtension: "momd")!
     return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
   
   
   lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-    
-    println("Instantiating the persistentStoreCoordinator property")
     
     var coordinator: NSPersistentStoreCoordinator? = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
     let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(SQLITE_FILE_NAME)
@@ -73,8 +67,6 @@ class CoreDataStackManager {
     }()
   
   lazy var managedObjectContext: NSManagedObjectContext? = {
-    
-    println("Instantiating the managedObjectContext property")
 
     let coordinator = self.persistentStoreCoordinator
     if coordinator == nil {

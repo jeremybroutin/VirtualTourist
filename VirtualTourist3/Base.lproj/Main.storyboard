@@ -318,6 +318,10 @@
                                 <exclude reference="YlG-f6-eNc"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="0af-sb-y3R"/>
+                                <exclude reference="ANT-Nj-LPT"/>
+                                <exclude reference="rfy-BG-agE"/>
+                                <exclude reference="HR9-JY-Xy8"/>
                                 <exclude reference="AZe-aj-r2B"/>
                                 <exclude reference="b20-yI-3Tc"/>
                                 <exclude reference="rPI-ek-RvY"/>
@@ -328,10 +332,6 @@
                                 <exclude reference="geJ-0L-KF8"/>
                                 <exclude reference="hjh-L6-6A2"/>
                                 <exclude reference="v0P-bR-ixH"/>
-                                <exclude reference="0af-sb-y3R"/>
-                                <exclude reference="ANT-Nj-LPT"/>
-                                <exclude reference="rfy-BG-agE"/>
-                                <exclude reference="HR9-JY-Xy8"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -342,6 +342,10 @@
                                 <include reference="YlG-f6-eNc"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="0af-sb-y3R"/>
+                                <include reference="ANT-Nj-LPT"/>
+                                <include reference="rfy-BG-agE"/>
+                                <include reference="HR9-JY-Xy8"/>
                                 <include reference="AZe-aj-r2B"/>
                                 <include reference="b20-yI-3Tc"/>
                                 <include reference="rPI-ek-RvY"/>
@@ -352,10 +356,6 @@
                                 <include reference="geJ-0L-KF8"/>
                                 <include reference="hjh-L6-6A2"/>
                                 <include reference="v0P-bR-ixH"/>
-                                <include reference="0af-sb-y3R"/>
-                                <include reference="ANT-Nj-LPT"/>
-                                <include reference="rfy-BG-agE"/>
-                                <include reference="HR9-JY-Xy8"/>
                             </mask>
                         </variation>
                     </view>

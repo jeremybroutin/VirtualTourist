@@ -28,12 +28,6 @@ class FlickrClient: NSObject {
     return Singleton.sharedInstance
   }
   
-  /** Mark: - Shared Image Cache **/
-  
-  struct Caches {
-    static let imageCache = ImageCache()
-  }
-  
   /** Mark: - Client helper methods **/
   
   func taskForResources(parameters: [String:AnyObject], completionHandler: CompletionHander) -> NSURLSessionDataTask {
@@ -41,7 +35,6 @@ class FlickrClient: NSObject {
     // Build the request
     let urlString = Constants.BaseURL + FlickrClient.escapedParameters(parameters)
     let url = NSURL(string: urlString)
-    println("request is \(urlString)")
     let request = NSURLRequest(URL: url!)
     
     // Initiate task
@@ -116,7 +109,6 @@ class FlickrClient: NSObject {
     if let error = parsingError {
       completionHandler(result: nil, error: error)
     } else {
-      println("Step 4 - parseJSONWithCompletionHandler is invoked.")
       completionHandler(result: parsedResult, error: nil)
     }
   }

@@ -53,21 +53,6 @@ class Photo : NSManagedObject {
     else {
       return UIImage(named: "noImage")
     }
-    
-    /**
-    get {
-      if let url = imageURL {
-        return FlickrClient.Caches.imageCache.imageWithIdentifier(url.lastPathComponent)
-      }
-      else {
-        return UIImage(named: "noImage")
-      }
-    }
-    set {
-      if let url = imageURL {
-        FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: url.lastPathComponent)
-      }
-    }**/
   }
   
   // Thanks to paul_288661
