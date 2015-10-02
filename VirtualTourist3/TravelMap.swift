@@ -72,13 +72,19 @@ class TravelMap: UIViewController, MKMapViewDelegate {
       // add it to the map
       mapView.addAnnotation(pinToBeAdded)
     
-      // user didn't release and drags pin
-    // case .Changed:
+      // user didn't release and drags pin around
+      // see SO answer here: http://stackoverflow.com/questions/20595440/setting-mkannotation-coordinates-in-real-time
+      // manual KVO notifications
+    case .Changed:
       // update coordinates of the pin
-      // pinToBeAdded?.coordinate = newCoord
+      pinToBeAdded?.willChangeValueForKey("coordinate")
+      pinToBeAdded?.coordinate = newCoord
+      pinToBeAdded?.didChangeValueForKey("coordinate")
     
       // pin is dropped
     case .Ended:
+      //debug
+      println("pin coordinates are: \(pinToBeAdded?.coordinate.latitude), \(pinToBeAdded?.coordinate.longitude)")
       // download photos and images for the pin
       FlickrClient.sharedInstance().getPhotosForPin(pinToBeAdded!, completionHandler: {
         success, error in

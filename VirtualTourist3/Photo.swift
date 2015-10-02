@@ -19,7 +19,7 @@ class Photo : NSManagedObject {
     static let ID = "id"
   }
   
-  @NSManaged var imageURL: String
+  @NSManaged var imageURL: String?
   @NSManaged var imageFilePath: String?
   @NSManaged var id: String
   @NSManaged var pin: Pin?
@@ -35,19 +35,53 @@ class Photo : NSManagedObject {
     super.init(entity: entity, insertIntoManagedObjectContext: context)
     
     // Dictionary
-    imageURL = dictionary[Keys.ImageURL] as! String
-    imageFilePath = imageURL.lastPathComponent as String
+    imageURL = dictionary[Keys.ImageURL] as? String
+    //imageFilePath = imageURL.lastPathComponent as String
     id = dictionary[Keys.ID] as! String
   }
   
   var image: UIImage? {
     
-    get {
-      return FlickrClient.Caches.imageCache.imageWithIdentifier(imageFilePath)
+    if let imageFilePath = imageFilePath {
+      let fileName = imageFilePath.lastPathComponent
+      let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+      let pathArray = [dirPath, fileName]
+      let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
+      
+      return UIImage(contentsOfFile: fileURL.path!)
+    }
+    else {
+      return UIImage(named: "noImage")
     }
     
-    set {
-      FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: imageFilePath!)
+    /**
+    get {
+      if let url = imageURL {
+        return FlickrClient.Caches.imageCache.imageWithIdentifier(url.lastPathComponent)
+      }
+      else {
+        return UIImage(named: "noImage")
+      }
     }
+    set {
+      if let url = imageURL {
+        FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: url.lastPathComponent)
+      }
+    }**/
   }
-}
+  
+  // Thanks to paul_288661
+  // https://discussions.udacity.com/t/virtual-tourist-empty-an-array-in-an-nsmanagedobject/29447/7
+  
+  override func prepareForDeletion() {
+    
+    //Delete the associated image file when the Photo managed object is deleted.
+    if let fileName = imageFilePath?.lastPathComponent {
+      
+      let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+      let pathArray = [dirPath, fileName]
+      let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
+      
+      NSFileManager.defaultManager().removeItemAtURL(fileURL, error: nil)
+    }
+  }}

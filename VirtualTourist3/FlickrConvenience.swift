@@ -86,17 +86,30 @@ extension FlickrClient {
   
   // Helper function to get 
   func getImageForPhoto(photo: Photo, completionHandler: (success: Bool, error: NSError?)-> Void) {
+    
     let imageURL = photo.imageURL
-    taskForImage(imageURL, completionHandler: {
+    
+    taskForImage(imageURL!, completionHandler: {
       imageData, error in
       if let error = error {
         println("error getting image for photo")
-        photo.image = UIImage(named: "noImage")
+        //photo.image = UIImage(named: "noImage")
         completionHandler(success: false, error: error)
       }
       if let imageData = imageData {
         let image = UIImage(data: imageData)
-        photo.image = image
+        //photo.image = image
+        
+        // store image file in document directory
+        let fileName = imageURL!.lastPathComponent
+        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+        let pathArray = [dirPath, fileName]
+        let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
+        NSFileManager.defaultManager().createFileAtPath(fileURL.path!, contents: imageData, attributes: nil)
+        
+        // attach the newly saved image data to the photo object
+        photo.imageFilePath = fileURL.path
+        
         completionHandler(success: true, error: nil)
       }
       
