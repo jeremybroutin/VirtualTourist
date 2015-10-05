@@ -36,7 +36,6 @@ class Photo : NSManagedObject {
     
     // Dictionary
     imageURL = dictionary[Keys.ImageURL] as? String
-    //imageFilePath = imageURL.lastPathComponent as String
     id = dictionary[Keys.ID] as! String
   }
   
