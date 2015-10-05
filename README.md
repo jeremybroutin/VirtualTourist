@@ -6,3 +6,6 @@ Skills used:
 - networking (Flickr API)
 - persistence (NSUserDefaults, .DocumentsDirectory, Core Data)
 - NSFetchedResultsController and its delegate methods
+
+Current issue:<br>
+Map disappear in the LocationPhotos on landscape mode
