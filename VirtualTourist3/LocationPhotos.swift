@@ -79,16 +79,6 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     fetchedResultsController.delegate = self
   }
   
-  override func viewWillAppear(animated: Bool) {
-    super.viewWillAppear(animated)
-    
-  }
-  
-  override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(animated)
-    
-  }
-  
   
   override func viewDidLayoutSubviews() {
     //Layout the collectionView cells properly on the View

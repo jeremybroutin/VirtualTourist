@@ -149,15 +149,6 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     return results as! [Pin]
   }
   
-  /**
-  // Create alert
-  func createAlert(title: String, message: String, action: UIAlertAction?) {
-    let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-    let action = action
-    alertController.addAction(action!)
-    self.presentViewController(alertController, animated: true, completion: nil)
-  }**/
-  
   /** Mark: - Helper functions for map region **/
   
   func saveMapRegion() {
