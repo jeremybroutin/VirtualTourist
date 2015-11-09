@@ -26,7 +26,7 @@ extension FlickrClient {
     var randomPage = 1
     if let numberOfPages = pin.numberOfPages {
       // Because pin.numberOfPages is a NSNumber, we need to downcast it to an Int
-      let numberOfPagesAsInt = numberOfPages as! Int
+      let numberOfPagesAsInt = numberOfPages as Int
       randomPage = Int((arc4random_uniform(UInt32(numberOfPagesAsInt)))) + 1
       // + 1 avoid returning the page 0 which doesn't exist
     }
@@ -97,7 +97,7 @@ extension FlickrClient {
         
         // store image file in document directory
         let fileName = imageURL!.lastPathComponent
-        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
         let pathArray = [dirPath, fileName]
         let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
         NSFileManager.defaultManager().createFileAtPath(fileURL.path!, contents: imageData, attributes: nil)

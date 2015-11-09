@@ -62,7 +62,11 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     
     // start the fetched results controller
     var error: NSError?
-    fetchedResultsController.performFetch(&error)
+    do {
+      try fetchedResultsController.performFetch()
+    } catch let error1 as NSError {
+      error = error1
+    }
     
     // if it throws an error, inform users
     if let error = error {
@@ -80,21 +84,8 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
   }
   
   
-  override func viewDidLayoutSubviews() {
-    //Layout the collectionView cells properly on the View
-    let layout = UICollectionViewFlowLayout()
-    
-    layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-    layout.minimumLineSpacing = 5
-    layout.minimumInteritemSpacing = 5
-    
-    let width = (floor(self.collectionView.frame.size.width / 3)) - 7
-    layout.itemSize = CGSize(width: width, height: width)
-    collectionView.collectionViewLayout = layout
-  }
   
-  
-    /**********************************************************************************************/
+  /**********************************************************************************************/
   
   /** Mark: - IBActions **/
   
@@ -130,7 +121,7 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     cell.selectedIcon.hidden = true
     
     // start with the placeholder
-    var photoImage = UIImage(named: "photoPlaceHolder")
+    let photoImage = UIImage(named: "photoPlaceHolder")
     cell.activityIndicatorView.startAnimating()
     cell.imageView.image = photoImage
     cell.imageView.alpha = 0.5
@@ -229,7 +220,7 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
     
     // if touched image was already selected, unselect it and remove it from selectedIndexes...
-    if let index = find(selectedIndexes, indexPath) {
+    if let index = selectedIndexes.indexOf(indexPath) {
       selectedIndexes.removeAtIndex(index)
       
       // ... and unhiglight it
@@ -285,7 +276,7 @@ UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
   }
   
   func controller(controller: NSFetchedResultsController,
-    didChangeObject anObject: AnyObject,
+    didChangeObject anObject: NSManagedObject,
     atIndexPath indexPath: NSIndexPath?,
     forChangeType type: NSFetchedResultsChangeType,
     newIndexPath: NSIndexPath?) {

@@ -144,7 +144,13 @@ class TravelMap: UIViewController, MKMapViewDelegate {
   func fetchAllPins() -> [Pin] {
     let error: NSErrorPointer = nil
     let fetchRequest = NSFetchRequest(entityName: "Pin")
-    let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
+    let results: [AnyObject]?
+    do {
+      results = try sharedContext.executeFetchRequest(fetchRequest)
+    } catch let error1 as NSError {
+      error.memory = error1
+      results = nil
+    }
     
     return results as! [Pin]
   }
@@ -180,13 +186,13 @@ class TravelMap: UIViewController, MKMapViewDelegate {
   
   /** Mark: - Map Delegate **/
   
-  func mapViewDidFinishLoadingMap(mapView: MKMapView!) {
+  func mapViewDidFinishLoadingMap(mapView: MKMapView) {
     // stop and hide the activity indicator
     activityIndicator.stopAnimating()
     activityIndicator.hidden = true
   }
   
-  func mapViewDidFailLoadingMap(mapView: MKMapView!, withError error: NSError!) {
+  func mapViewDidFailLoadingMap(mapView: MKMapView, withError error: NSError) {
     // stop and hide the activity indicator
     activityIndicator.stopAnimating()
     activityIndicator.hidden = true
@@ -199,11 +205,11 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     //createAlert(title, message: message, action: action)
   }
   
-  func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
+  func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
     self.saveMapRegion()
   }
   
-  func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+  func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView! {
     if let annotation = annotation as? Pin {
       let identifier = "pin"
       var view: MKPinAnnotationView
@@ -223,7 +229,7 @@ class TravelMap: UIViewController, MKMapViewDelegate {
     return nil
   }
   
-  func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+  func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
     // If the user is on the Edit mode
     if editButton.title == "Done" {
       let pin = view.annotation as! Pin

@@ -82,13 +82,13 @@ class FlickrClient: NSObject {
       urlVars += [key + "=" + "\(replaceSpaceValue)"]
     }
     
-    return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
+    return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
   }
   
   /** Try to make a better error, based on the status_message from TheMovieDB. If we cant then return the previous error **/
   class func errorForData(data: NSData?, response: NSURLResponse?, error: NSError) -> NSError {
     
-    if let parsedResult = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? [String : AnyObject] {
+    if let parsedResult = (try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)) as? [String : AnyObject] {
       if let errorMessage = parsedResult[JSONResponseKeys.Status] as? String {
         
         let userInfo = [NSLocalizedDescriptionKey : errorMessage]
@@ -104,7 +104,13 @@ class FlickrClient: NSObject {
   class func parseJSONWithCompletionHandler(data: NSData, completionHandler: CompletionHander) {
     var parsingError: NSError? = nil
     
-    let parsedResult: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)
+    let parsedResult: AnyObject?
+    do {
+      parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+    } catch let error as NSError {
+      parsingError = error
+      parsedResult = nil
+    }
     
     if let error = parsingError {
       completionHandler(result: nil, error: error)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tfm-hH-TnP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tfm-hH-TnP">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -13,6 +14,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="58g-IS-45w">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </navigationBar>
                     <connections>
                         <segue destination="CBP-ea-ggB" kind="relationship" relationship="rootViewController" id="lHq-8y-s1X"/>
@@ -36,6 +38,7 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Vx0-bR-mac">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <animations/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="M9u-WI-Rma" appends="YES" id="0Qj-I4-KBz"/>
@@ -43,6 +46,7 @@
                             </mapView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rTW-HW-0lf">
                                 <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                <animations/>
                                 <color key="color" red="1" green="0.2577073211" blue="0.30710643030000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="182" y="281" width="37" height="37"/>
@@ -50,6 +54,7 @@
                             </activityIndicatorView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap a Pin to delete it" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bTe-X5-M7T">
                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <animations/>
                                 <color key="backgroundColor" red="1" green="0.24335864559586251" blue="0.24147470711892005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="PAK-ld-5ym"/>
@@ -74,6 +79,7 @@
                                 </variation>
                             </label>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bTe-X5-M7T" firstAttribute="bottom" secondItem="n4l-gi-AkO" secondAttribute="top" id="DBi-J8-Eu2">
@@ -160,8 +166,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L7A-ns-LNj">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <animations/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Jde-1F-K3C"/>
+                                    <barButtonItem title="New Collection" id="Ukf-aJ-oOy">
+                                        <connections>
+                                            <action selector="tapNewCollection:" destination="JtU-RE-hZs" id="52b-Eq-51p"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EKm-l6-Yc9"/>
+                                </items>
+                            </toolbar>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uwI-qu-ViQ">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="pkY-q7-Jad">
+                                        <variation key="widthClass=compact" constant="130"/>
+                                    </constraint>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="pkY-q7-Jad"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="pkY-q7-Jad"/>
+                                    </mask>
+                                </variation>
+                            </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CrI-nC-TZ6">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <animations/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jl2-gb-OmW">
                                     <size key="itemSize" width="100" height="100"/>
@@ -172,6 +211,7 @@
                                 <label key="backgroundView" hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sorry, there is no photo for this location :'(" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YlG-f6-eNc">
                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <animations/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -186,23 +226,32 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDh-F0-aMB">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <animations/>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7iR-Ic-AMd">
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                                    <animations/>
                                                 </activityIndicatorView>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="selectIcon" translatesAutoresizingMaskIntoConstraints="NO" id="gcq-Vi-GZy">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <animations/>
                                                 </imageView>
                                             </subviews>
+                                            <animations/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstItem="dDh-F0-aMB" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="-8" id="7jC-XX-IwK">
                                                 <variation key="widthClass=compact" constant="-8"/>
                                             </constraint>
                                             <constraint firstItem="7iR-Ic-AMd" firstAttribute="centerY" secondItem="dDh-F0-aMB" secondAttribute="centerY" id="DzP-Ih-Glx"/>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="leading" secondItem="9oB-WU-S7q" secondAttribute="leadingMargin" constant="-8" id="S5l-iC-So7"/>
                                             <constraint firstItem="gcq-Vi-GZy" firstAttribute="centerX" secondItem="dDh-F0-aMB" secondAttribute="centerX" id="UEg-Qu-xT8"/>
                                             <constraint firstItem="gcq-Vi-GZy" firstAttribute="centerX" secondItem="7iR-Ic-AMd" secondAttribute="centerX" id="UaC-YL-q9R"/>
+                                            <constraint firstItem="dDh-F0-aMB" firstAttribute="top" secondItem="9oB-WU-S7q" secondAttribute="topMargin" constant="-8" id="aNZ-wR-NDx"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="dDh-F0-aMB" secondAttribute="bottom" constant="-8" id="bwM-vM-Vwj"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="dDh-F0-aMB" secondAttribute="trailing" constant="-8" id="c03-Be-cHn"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="gcq-Vi-GZy" secondAttribute="bottom" constant="24" id="f0f-Am-fwo"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="dDh-F0-aMB" secondAttribute="bottom" constant="-8" id="he5-lH-7JO">
                                                 <variation key="widthClass=compact" constant="-8"/>
@@ -226,8 +275,11 @@
                                                 <exclude reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="DzP-Ih-Glx"/>
                                                 <exclude reference="7jC-XX-IwK"/>
+                                                <exclude reference="S5l-iC-So7"/>
+                                                <exclude reference="aNZ-wR-NDx"/>
+                                                <exclude reference="bwM-vM-Vwj"/>
+                                                <exclude reference="c03-Be-cHn"/>
                                                 <exclude reference="he5-lH-7JO"/>
                                                 <exclude reference="ivM-Zh-aoZ"/>
                                                 <exclude reference="jp9-lm-DKO"/>
@@ -238,6 +290,7 @@
                                                 <exclude reference="f0f-Am-fwo"/>
                                                 <exclude reference="l4G-Aj-ygU"/>
                                                 <exclude reference="qEa-fk-Krk"/>
+                                                <exclude reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -247,8 +300,11 @@
                                                 <include reference="gcq-Vi-GZy"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <include reference="DzP-Ih-Glx"/>
                                                 <include reference="7jC-XX-IwK"/>
+                                                <include reference="S5l-iC-So7"/>
+                                                <include reference="aNZ-wR-NDx"/>
+                                                <include reference="bwM-vM-Vwj"/>
+                                                <include reference="c03-Be-cHn"/>
                                                 <include reference="he5-lH-7JO"/>
                                                 <include reference="ivM-Zh-aoZ"/>
                                                 <include reference="jp9-lm-DKO"/>
@@ -259,6 +315,7 @@
                                                 <include reference="f0f-Am-fwo"/>
                                                 <include reference="l4G-Aj-ygU"/>
                                                 <include reference="qEa-fk-Krk"/>
+                                                <include reference="DzP-Ih-Glx"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -269,37 +326,8 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L7A-ns-LNj">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Jde-1F-K3C"/>
-                                    <barButtonItem title="New Collection" id="Ukf-aJ-oOy">
-                                        <connections>
-                                            <action selector="tapNewCollection:" destination="JtU-RE-hZs" id="52b-Eq-51p"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EKm-l6-Yc9"/>
-                                </items>
-                            </toolbar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uwI-qu-ViQ">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="pkY-q7-Jad">
-                                        <variation key="widthClass=compact" constant="130"/>
-                                    </constraint>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="pkY-q7-Jad"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="pkY-q7-Jad"/>
-                                    </mask>
-                                </variation>
-                            </mapView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="L7A-ns-LNj" secondAttribute="trailing" constant="-16" id="3iG-x4-Esf"/>
@@ -343,11 +371,15 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="CrI-nC-TZ6"/>
                                 <exclude reference="L7A-ns-LNj"/>
                                 <exclude reference="uwI-qu-ViQ"/>
+                                <exclude reference="CrI-nC-TZ6"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="3iG-x4-Esf"/>
+                                <exclude reference="gBn-zP-lLB"/>
+                                <exclude reference="oSK-7D-fly"/>
+                                <exclude reference="qSn-cT-3mz"/>
                                 <exclude reference="Jeh-dk-R9R"/>
                                 <exclude reference="Rhe-ZO-mY6"/>
                                 <exclude reference="THA-kU-TUl"/>
@@ -376,19 +408,19 @@
                                 <exclude reference="v65-e0-bOZ"/>
                                 <exclude reference="xx9-4R-mkt"/>
                                 <exclude reference="zbE-J2-lWC"/>
-                                <exclude reference="3iG-x4-Esf"/>
-                                <exclude reference="gBn-zP-lLB"/>
-                                <exclude reference="oSK-7D-fly"/>
-                                <exclude reference="qSn-cT-3mz"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="CrI-nC-TZ6"/>
                                 <include reference="L7A-ns-LNj"/>
                                 <include reference="uwI-qu-ViQ"/>
+                                <include reference="CrI-nC-TZ6"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="3iG-x4-Esf"/>
+                                <include reference="gBn-zP-lLB"/>
+                                <exclude reference="oSK-7D-fly"/>
+                                <include reference="qSn-cT-3mz"/>
                                 <exclude reference="Jeh-dk-R9R"/>
                                 <exclude reference="Rhe-ZO-mY6"/>
                                 <exclude reference="THA-kU-TUl"/>
@@ -417,10 +449,6 @@
                                 <exclude reference="v65-e0-bOZ"/>
                                 <include reference="xx9-4R-mkt"/>
                                 <exclude reference="zbE-J2-lWC"/>
-                                <include reference="3iG-x4-Esf"/>
-                                <include reference="gBn-zP-lLB"/>
-                                <exclude reference="oSK-7D-fly"/>
-                                <include reference="qSn-cT-3mz"/>
                             </mask>
                         </variation>
                     </view>

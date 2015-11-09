@@ -29,7 +29,7 @@ class CoreDataStackManager {
   lazy var applicationDocumentsDirectory: NSURL = {
     
     let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-    return urls[urls.count-1] as! NSURL
+    return urls[urls.count-1] 
     }()
   
   lazy var managedObjectModel: NSManagedObjectModel = {
@@ -45,11 +45,14 @@ class CoreDataStackManager {
     var coordinator: NSPersistentStoreCoordinator? = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
     let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(SQLITE_FILE_NAME)
     
-    println("sqlite path: \(url.path!)")
+    print("sqlite path: \(url.path!)")
     
     var error: NSError? = nil
     
-    if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
+    do {
+      try coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+    } catch var error1 as NSError {
+      error = error1
       coordinator = nil
       // Report any error we got.
       let dict = NSMutableDictionary()
@@ -61,6 +64,8 @@ class CoreDataStackManager {
       // Left in for development development.
       NSLog("Unresolved error \(error), \(error!.userInfo)")
       abort()
+    } catch {
+      fatalError()
     }
     
     return coordinator
@@ -85,9 +90,14 @@ class CoreDataStackManager {
       
       var error: NSError? = nil
       
-      if context.hasChanges && !context.save(&error) {
-        NSLog("Unresolved error \(error), \(error!.userInfo)")
-        abort()
+      if context.hasChanges {
+        do {
+          try context.save()
+        } catch let error1 as NSError {
+          error = error1
+          NSLog("Unresolved error \(error), \(error!.userInfo)")
+          abort()
+        }
       }
     }
   }
