@@ -1,7 +1,6 @@
 # VirtualTourist
 ## Description
-Udacity iOS Developer Nanodegree - 4th project: iOS Core Persistence
-
+Udacity iOS Developer Nanodegree - 4th project: iOS Core Persistence<br>
 VirtualTourist lets you drop a pin on a world map and returns related FlickR pictures for the pinned location.
 ## App content
 As we progressed further into the iOS Nanodegree, this app includes:
